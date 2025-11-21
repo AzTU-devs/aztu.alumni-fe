@@ -1,0 +1,30 @@
+import apiClient from "../../util/apiClient";
+
+export interface Education {
+    university: string;
+    degree: string;
+    major: string;
+    start_date: string;
+    end_date: string;
+    gpa: number
+}
+
+export const getEducations = async (uuid: string) => {
+    try {
+        const response = await apiClient.get(`/api/education/${uuid}`);
+
+        if (response.data.status_code === 200) {
+            return response.data.education;
+        } else if (response.data.status_code === 204) {
+            return "NO CONTENT";
+        }
+    } catch (err: any) {
+        if (err.response) {
+            if (err.response.status === 404) {
+                return "NOT FOUND";
+            }
+            return "ERROR";
+        }
+        return "NETWORK ERROR";
+    }
+}

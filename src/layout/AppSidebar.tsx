@@ -1,5 +1,6 @@
-import { useCallback, useEffect, useRef, useState } from "react";
 import { Link, useLocation } from "react-router";
+import PeopleIcon from '@mui/icons-material/People';
+import { useCallback, useEffect, useRef, useState } from "react";
 
 // Assume these icons are imported from an icon library
 import {
@@ -44,6 +45,11 @@ const navItems: NavItem[] = [
     name: "Forms",
     icon: <ListIcon />,
     subItems: [{ name: "Form Elements", path: "/form-elements", pro: false }],
+  },
+  {
+    name: "Məzunlar",
+    icon: <PeopleIcon />,
+    path: "/alumnis"
   },
   {
     name: "Tables",
