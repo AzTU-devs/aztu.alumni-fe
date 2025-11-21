@@ -1,5 +1,4 @@
 import React from "react";
-import ThemeTogglerTwo from "../../components/common/ThemeTogglerTwo";
 
 export default function AuthLayout({
   children,
@@ -14,7 +13,6 @@ export default function AuthLayout({
             backgroundImage: "url('/images/aztu.webp')",
             backgroundRepeat: "no-repeat"
           }}>
-          {/* Blue overlay */}
           <div className="absolute inset-0 bg-blue-900/80"></div>
 
           <div className="flex flex-col items-start justify-between z-1 h-full p-[30px]">
@@ -31,9 +29,6 @@ export default function AuthLayout({
               <p className="text-[20px] text-white">Karyeranızı inkişaf etdirin</p>
             </div>
           </div>
-        </div>
-        <div className="fixed z-50 hidden bottom-6 right-6 sm:block">
-          <ThemeTogglerTwo />
         </div>
         {children}
       </div>

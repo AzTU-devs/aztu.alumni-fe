@@ -1,53 +1,99 @@
-import { useState } from "react";
 import Label from "../form/Label";
-import Input from "../form/input/InputField";
-import Checkbox from "../form/input/Checkbox";
-import { ChevronLeftIcon, EyeIcon, EyeCloseIcon } from "../../icons";
+import Select from "../form/Select";
+import { useState, useEffect } from "react";
+import DatePicker from "../form/date-picker";
+import { ChevronLeftIcon } from "../../icons";
+import Button from "../ui/button/Button";
+import { useDispatch, useSelector } from "react-redux";
+import { setSignupData } from "../../redux/slices/signupSlice";
+import { RootState } from "../../redux/store";
 
 interface StepTwoSignUpProps {
   onNext: (data: {
-    fname: string;
-    lname: string;
-    email: string;
-    password: string;
-    agreed: boolean;
+    degree: string;
+    major: string;
+    startDate: string;
+    endDate: string;
   }) => void;
-  onBack: () => void; // <-- back prop
+  onBack: () => void;
 }
 
-export default function StepTwoSignUp({ onNext, onBack }: StepTwoSignUpProps) {
-  const [formData, setFormData] = useState({
-    fname: "",
-    lname: "",
-    email: "",
-    password: "",
-  });
-  const [showPassword, setShowPassword] = useState(false);
-  const [agreed, setAgreed] = useState(false);
+export default function StepTwoSignUp({ onNext, onBack}: StepTwoSignUpProps) {
+  const dispatch = useDispatch();
   const [error, setError] = useState("");
 
-  const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    setFormData({ ...formData, [e.target.name]: e.target.value });
+  const signup = useSelector((state: RootState) => state.signup);
+
+  const [degree, setDegree] = useState(signup.degree);
+  const [major, setMajor] = useState(signup.major);
+  const [startDate, setStartDate] = useState(signup.startDate);
+  const [endDate, setEndDate] = useState(signup.endDate);
+
+  useEffect(() => {
+    setDegree(signup.degree);
+    setMajor(signup.major);
+    setStartDate(signup.startDate);
+    setEndDate(signup.endDate);
+  }, [signup]);
+
+  console.log(signup);
+  
+
+  const degreeOptions = [
+    {
+      value: "Bakalavr",
+      label: "Bakalavr"
+    }, {
+      value: "Magistr",
+      label: "Magistr"
+    }, {
+      value: "Doktorantura",
+      label: "Doktorantura"
+    }
+  ];
+
+  const degreeOnChange = (value: string) => {
+    setDegree(value);
   };
+
+  const majorOptions = [
+    {
+      value: "6001660",
+      label: "Kompüter elmləri"
+    }, {
+      value: "6001550",
+      label: "İnformasiya Texnalogiyaları"
+    }, {
+      value: "6001220",
+      label: "Kompüter Mühəndisliyi"
+    }
+  ];
+
+  const majorOnChange = (value: string) => {
+    setMajor(value);
+  }
 
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
 
-    if (!formData.fname || !formData.lname || !formData.email || !formData.password) {
+    if (!degree || !major || !startDate || !endDate) {
       setError("Please fill in all fields.");
-      return;
-    }
-    if (!agreed) {
-      setError("You must agree to the Terms and Privacy Policy.");
       return;
     }
 
     setError("");
-    onNext({ ...formData, agreed });
+
+    const stepTwoData = { degree, major, startDate, endDate };
+
+    // Save to Redux
+    dispatch(setSignupData(stepTwoData));
+
+    // Pass data to parent
+    onNext(stepTwoData);
   };
 
   return (
-    <div className="max-w-md mx-auto p-5">
+    <div className="w-full p-5">
       {/* Back button */}
       <div className="mb-5">
         <button
@@ -55,86 +101,68 @@ export default function StepTwoSignUp({ onNext, onBack }: StepTwoSignUpProps) {
           onClick={onBack}
           className="inline-flex items-center text-gray-500 hover:text-gray-700 text-sm"
         >
-          <ChevronLeftIcon className="size-5 mr-1" /> Back
+          <ChevronLeftIcon className="size-5 mr-1" /> Əvvəlki addım
         </button>
       </div>
 
-      <h2 className="text-2xl font-semibold mb-4">Step 2: Account Details</h2>
+      <h2 className="text-2xl font-semibold mb-4">Addım 2: Təhsil məlumatları</h2>
 
       {error && <p className="mb-3 text-red-500">{error}</p>}
 
       <form onSubmit={handleSubmit} className="space-y-5">
+        <div className="grid grid-cols-1 gap-5 sm:grid-cols-1">
+          <div>
+            <Label>Təhsil pilləsi<span className="text-error-500">*</span></Label>
+            <Select
+              options={degreeOptions}
+              onChange={degreeOnChange}
+              value={degree}
+              placeholder="Təhsil pilləsi seçin"
+            />
+          </div>
+        </div>
+        <div className="grid grid-cols-1 gap-5 sm:grid-cols-1">
+          <div>
+            <Label>İxtisas<span className="text-error-500">*</span></Label>
+            <Select
+              options={majorOptions}
+              onChange={majorOnChange}
+              value={major}
+              placeholder="İxtisas axtarın seçin"
+            />
+          </div>
+        </div>
         <div className="grid grid-cols-1 gap-5 sm:grid-cols-2">
           <div>
-            <Label>First Name<span className="text-error-500">*</span></Label>
-            <Input
-              type="text"
-              name="fname"
-              value={formData.fname}
-              onChange={handleChange}
-              placeholder="First Name"
+            <Label>Başlanğıc tarixi<span className="text-error-500">*</span></Label>
+            <DatePicker
+              id="start-date"
+              placeholder="Tarix seçin"
+              value={startDate}
+              onChange={(_, currentDateString) => {
+                setStartDate(currentDateString || "");
+              }}
             />
           </div>
           <div>
-            <Label>Last Name<span className="text-error-500">*</span></Label>
-            <Input
-              type="text"
-              name="lname"
-              value={formData.lname}
-              onChange={handleChange}
-              placeholder="Last Name"
+            <Label>Bitirmə tarixi<span className="text-error-500">*</span></Label>
+            <DatePicker
+              id="end-date"
+              placeholder="Tarix seçin"
+              value={endDate}
+              onChange={(_, currentDateString) => {
+                setEndDate(currentDateString || "");
+              }}
             />
           </div>
         </div>
 
-        <div>
-          <Label>Email<span className="text-error-500">*</span></Label>
-          <Input
-            type="email"
-            name="email"
-            value={formData.email}
-            onChange={handleChange}
-            placeholder="you@example.com"
-          />
-        </div>
-
-        <div>
-          <Label>Password<span className="text-error-500">*</span></Label>
-          <div className="relative">
-            <Input
-              type={showPassword ? "text" : "password"}
-              name="password"
-              value={formData.password}
-              onChange={handleChange}
-              placeholder="Enter your password"
-            />
-            <span
-              onClick={() => setShowPassword(!showPassword)}
-              className="absolute top-1/2 right-3 -translate-y-1/2 cursor-pointer"
-            >
-              {showPassword ? (
-                <EyeIcon className="size-5 fill-gray-500 dark:fill-gray-400" />
-              ) : (
-                <EyeCloseIcon className="size-5 fill-gray-500 dark:fill-gray-400" />
-              )}
-            </span>
-          </div>
-        </div>
-
-        <div className="flex items-center gap-3">
-          <Checkbox checked={agreed} onChange={setAgreed} />
-          <p className="text-sm text-gray-500 dark:text-gray-400">
-            I agree to the <span className="text-gray-800 dark:text-white/90">Terms and Conditions</span> and <span className="text-gray-800 dark:text-white/90">Privacy Policy</span>.
-          </p>
-        </div>
-
-        <button
-          type="submit"
+        <Button
           className="w-full px-4 py-3 text-white bg-blue-500 rounded-lg hover:bg-blue-600"
         >
-          Next
-        </button>
+          Növbəti addım
+        </Button>
       </form>
     </div>
   );
-}   
+}

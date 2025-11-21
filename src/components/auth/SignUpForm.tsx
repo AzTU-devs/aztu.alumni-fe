@@ -2,34 +2,47 @@ import { useState } from "react";
 import StepOneSignUp from "./StepOneSignUp";
 import StepTwoSignUp from "./StepTwoSignUp";
 import StepThreeSignUp from "./StepThreeSignUp";
+import StepFourSignUp from "./StepFourSignUp";
 
-// Numbered stepper with connecting lines
 function Stepper({ currentStep }: { currentStep: number }) {
-  const steps = [1, 2, 3];
+  const steps = [1, 2, 3, 4];
 
   return (
-    <div className="flex items-center justify-between mb-6">
-      {steps.map((step, index) => (
-        <div key={step} className="flex-1 flex items-center">
-          {/* Circle with number */}
-          <div
-            className={`w-8 h-8 rounded-full flex items-center justify-center text-white font-semibold ${
-              currentStep >= step ? "bg-blue-500" : "bg-gray-300"
-            }`}
-          >
-            {step}
-          </div>
+    <div className="flex items-center w-full max-w-md mb-4">
+      {steps.map((step, index) => {
+        const isCompleted = currentStep > step;
+        const isActive = currentStep === step;
 
-          {/* Connecting line */}
-          {index < steps.length - 1 && (
+        // For the line fill: calculate the segment's width
+        let lineFill = 0;
+        if (currentStep > step) {
+          lineFill = 100; // fully filled
+        } else if (currentStep === step) {
+          lineFill = 0; // start filling next segment only after step increment
+        }
+
+        return (
+          <div key={step} className={`flex items-center ${index < steps.length - 1 ? 'flex-1' : ''}`}>
             <div
-              className={`flex-1 h-1 mx-2 ${
-                currentStep > step ? "bg-blue-500" : "bg-gray-300"
-              }`}
-            />
-          )}
-        </div>
-      ))}
+              className={`w-10 h-10 rounded-full flex items-center justify-center text-white text-sm font-semibold flex-shrink-0 ${currentStep >= step ? "bg-blue-500" : "bg-gray-300"
+                }`}
+            >
+              {step}
+            </div>
+
+            {index < steps.length - 1 && (
+              <div className="flex-1 h-1 mx-2 rounded overflow-hidden relative bg-gray-300">
+                <div
+                  className="h-1 rounded absolute left-0 top-0 bg-blue-500 transition-all duration-300"
+                  style={{
+                    width: `${currentStep > step ? 100 : 0}%`,
+                  }}
+                />
+              </div>
+            )}
+          </div>
+        );
+      })}
     </div>
   );
 }
@@ -52,14 +65,14 @@ export default function SignUpForm() {
   const handleBack = () => setCurrentStep((prev) => prev - 1);
 
   return (
-    <div className="max-w-md mx-auto p-5">
+    <div className="flex flex-col items-center justify-center w-[50%] px-4 min-h-screen">
       {/* Stepper */}
       <Stepper currentStep={currentStep} />
 
-      {/* Render current step */}
       {currentStep === 1 && <StepOneSignUp onNext={handleNext} />}
       {currentStep === 2 && <StepTwoSignUp onNext={handleNext} onBack={handleBack} />}
-      {currentStep === 3 && <StepThreeSignUp data={formData} onBack={handleBack} />}
+      {currentStep === 3 && (<StepThreeSignUp onNext={handleNext} onBack={handleBack} />)}
+      {currentStep === 4 && <StepFourSignUp onBack={handleBack} />}
     </div>
   );
 }

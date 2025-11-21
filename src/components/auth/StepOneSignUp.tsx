@@ -1,106 +1,130 @@
 import { useState } from "react";
+import Label from "../form/Label";
+import Button from "../ui/button/Button";
+import Input from "../form/input/InputField";
+import { EyeIcon, EyeCloseIcon } from "../../icons";
+import { useDispatch, useSelector } from "react-redux";
+import { RootState } from "../../redux/store";
+import { setSignupData } from "../../redux/slices/signupSlice";
 
 interface StepOneSignUpProps {
   onNext: (data: { fname: string; lname: string; email: string; password: string }) => void;
 }
 
 export default function StepOneSignUp({ onNext }: StepOneSignUpProps) {
-  const [formData, setFormData] = useState({
-    fname: "",
-    lname: "",
-    email: "",
-    password: "",
-  });
+  function capitalizeWords(str: string): string {
+    return str
+      .split(" ")
+      .map(word =>
+        word.charAt(0).toUpperCase() + word.slice(1).toLowerCase()
+      )
+      .join(" ");
+  }
+
+  const signup = useSelector((state: RootState) => state.signup);
+
+  const [name, setName] = useState(signup.fname);
+  const [surname, setSurname] = useState(signup.lname);
+  const [email, setEmail] = useState(signup.email);
+  const [password, setPassword] = useState(signup.password);
 
   const [error, setError] = useState("");
   const [showPassword, setShowPassword] = useState(false);
 
-  const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    setFormData({ ...formData, [e.target.name]: e.target.value });
-  };
+  const dispatch = useDispatch();
 
-  const handleSubmit = (e: React.FormEvent) => {
+  const handleNext = (e: React.FormEvent) => {
     e.preventDefault();
 
-    // Basic validation
-    if (!formData.fname || !formData.lname || !formData.email || !formData.password) {
-      setError("All fields are required.");
-      return;
-    }
-    if (!/\S+@\S+\.\S+/.test(formData.email)) {
-      setError("Enter a valid email address.");
+    if (!name || !surname || !email || !password) {
+      setError("Bütün sahələr doldurulmalıdır.");
       return;
     }
 
     setError("");
-    onNext(formData); // Send data to parent
+
+    dispatch(setSignupData({
+      fname: name,
+      lname: surname,
+      email,
+      password,
+    }));
+
+    onNext({
+      fname: name,
+      lname: surname,
+      email,
+      password,
+    });
   };
 
   return (
-    <div className="max-w-md mx-auto p-5">
-      <h2 className="text-2xl font-semibold mb-4">Step 1: Enter Your Details</h2>
+    <div className="w-full flex flex-col items-center justify-center p-5">
+      <h2 className="text-2xl font-semibold mb-4">Addım 1: Şəxsi məlumatlar</h2>
       {error && <p className="text-red-500 mb-3">{error}</p>}
-      <form onSubmit={handleSubmit} className="space-y-4">
-        <div>
-          <label className="block mb-1">First Name</label>
-          <input
-            type="text"
-            name="fname"
-            value={formData.fname}
-            onChange={handleChange}
-            className="w-full border rounded px-3 py-2"
-            placeholder="First Name"
-          />
-        </div>
-        <div>
-          <label className="block mb-1">Last Name</label>
-          <input
-            type="text"
-            name="lname"
-            value={formData.lname}
-            onChange={handleChange}
-            className="w-full border rounded px-3 py-2"
-            placeholder="Last Name"
-          />
-        </div>
-        <div>
-          <label className="block mb-1">Email</label>
-          <input
-            type="email"
-            name="email"
-            value={formData.email}
-            onChange={handleChange}
-            className="w-full border rounded px-3 py-2"
-            placeholder="you@example.com"
-          />
-        </div>
-        <div>
-          <label className="block mb-1">Password</label>
-          <div className="relative">
-            <input
-              type={showPassword ? "text" : "password"}
-              name="password"
-              value={formData.password}
-              onChange={handleChange}
-              className="w-full border rounded px-3 py-2"
-              placeholder="Password"
+      <form className="space-y-5 w-full" onSubmit={handleNext}>
+        <div className="grid grid-cols-1 gap-5 sm:grid-cols-2">
+          <div>
+            <Label>Ad<span className="text-error-500">&nbsp;*</span></Label>
+            <Input
+              type="text"
+              name="fname"
+              value={name}
+              onChange={(e) => setName(capitalizeWords(e.target.value))}
+              placeholder="Ad"
             />
-            <button
-              type="button"
-              onClick={() => setShowPassword(!showPassword)}
-              className="absolute right-3 top-2 text-sm text-blue-500"
-            >
-              {showPassword ? "Hide" : "Show"}
-            </button>
+          </div>
+          <div>
+            <Label>Soyad<span className="text-error-500">&nbsp;*</span></Label>
+            <Input
+              type="text"
+              name="lname"
+              value={surname}
+              onChange={(e) => setSurname(capitalizeWords(e.target.value))}
+              placeholder="Soyad"
+            />
           </div>
         </div>
 
-        <button
-          type="submit"
-          className="w-full bg-blue-500 text-white py-2 rounded hover:bg-blue-600"
+        <div>
+          <Label>Email<span className="text-error-500">*</span></Label>
+          <Input
+            type="email"
+            name="email"
+            value={email}
+            onChange={(e) => setEmail(e.target.value)}
+            placeholder="you@example.com"
+          />
+        </div>
+
+        <div>
+          <Label>Password<span className="text-error-500">*</span></Label>
+          <div className="relative">
+            <Input
+              type={showPassword ? "text" : "password"}
+              name="password"
+              value={password}
+              onChange={(e) => setPassword(e.target.value)}
+              placeholder="Enter your password"
+            />
+            <span
+              onClick={() => setShowPassword(!showPassword)}
+              className="absolute top-1/2 right-3 -translate-y-1/2 cursor-pointer"
+            >
+              {showPassword ? (
+                <EyeIcon className="size-5 fill-gray-500 dark:fill-gray-400" />
+              ) : (
+                <EyeCloseIcon className="size-5 fill-gray-500 dark:fill-gray-400" />
+              )}
+            </span>
+          </div>
+        </div>
+
+        <Button
+          className="w-full px-4 py-3 text-white bg-blue-500 rounded-lg hover:bg-blue-600"
         >
-          Next
-        </button>
+          Növbəti
+        </Button>
       </form>
     </div>
   );
