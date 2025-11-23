@@ -21,8 +21,10 @@ import ResponsiveLayout from "./layout/ResponsiveLayout";
 import AlumnisPage from "./pages/alumnisPage/AlumnisPage";
 import SettingsPage from "./pages/settingsPage/SettingsPage";
 import { ScrollToTop } from "./components/common/ScrollToTop";
+import EducationsPage from "./pages/educationPage/EducationsPage";
 import { BrowserRouter as Router, Routes, Route } from "react-router";
 import AlumniDetailsPage from "./pages/alumnisPage/AlumniDetailsPage";
+import NewEducationPage from "./pages/educationPage/NewEducationPage";
 
 export default function App() {
   const isMobile = useIsMobile();
@@ -64,6 +66,10 @@ export default function App() {
 
             {/* Settings */}
             <Route path="/settings" element={<SettingsPage />} />
+
+            {/* Education */}
+            <Route path="/educations" element={<EducationsPage />} />
+            <Route path="/new-education" element={<NewEducationPage />} />
 
           </Route>
 

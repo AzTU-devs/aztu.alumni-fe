@@ -13,7 +13,6 @@ function Stepper({ currentStep }: { currentStep: number }) {
         const isCompleted = currentStep > step;
         const isActive = currentStep === step;
 
-        // For the line fill: calculate the segment's width
         let lineFill = 0;
         if (currentStep > step) {
           lineFill = 100; // fully filled

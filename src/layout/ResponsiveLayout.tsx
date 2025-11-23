@@ -21,7 +21,7 @@ export default function ResponsiveLayout() {
                     </div>
                 </div>
             </header>
-            <main className="p-5">
+            <main className="p-5 mb-[70px]">
                 <Outlet />
             </main>
             <BottomNavigation />

@@ -14,6 +14,7 @@ type PropsType = {
   label?: string;
   placeholder?: string;
   value?: string; // controlled value
+  disabled?: boolean;
 };
 
 export default function DatePicker({
@@ -24,6 +25,7 @@ export default function DatePicker({
   defaultDate,
   placeholder,
   value,
+  disabled,
 }: PropsType) {
   const inputRef = useRef<HTMLInputElement | null>(null);
 
@@ -37,13 +39,15 @@ export default function DatePicker({
       dateFormat: "Y-m-d",
       defaultDate: value || defaultDate,
       position: "above",   // force calendar to open on top
+      clickOpens: !disabled,
+      allowInput: !disabled,
       onChange,
     });
 
     return () => {
       flatPickr.destroy();
     };
-  }, [mode, onChange, id, defaultDate, value]);
+  }, [mode, onChange, id, defaultDate, value, disabled]);
 
   return (
     <div>
@@ -51,10 +55,15 @@ export default function DatePicker({
 
       <div className="relative">
         <input
+          disabled={disabled}
           ref={inputRef}
           id={id}
           placeholder={placeholder}
-          className="h-11 w-full rounded-lg border appearance-none px-4 py-2.5 text-sm shadow-theme-xs placeholder:text-gray-400 focus:outline-hidden focus:ring-3  dark:bg-gray-900 dark:text-white/90 dark:placeholder:text-white/30  bg-transparent text-gray-800 border-gray-300 focus:border-brand-300 focus:ring-brand-500/20 dark:border-gray-700  dark:focus:border-brand-800"
+          className={`h-11 w-full rounded-lg border appearance-none px-4 py-2.5 text-sm shadow-theme-xs placeholder:text-gray-400 focus:outline-hidden focus:ring-3 
+            ${disabled 
+              ? "bg-gray-100 text-gray-500 cursor-not-allowed border-gray-200 dark:bg-gray-800 dark:text-gray-400 dark:border-gray-700" 
+              : "bg-transparent text-gray-800 border-gray-300 focus:border-brand-300 focus:ring-brand-500/20 dark:bg-gray-900 dark:text-white/90 dark:placeholder:text-white/30 dark:focus:border-brand-800"
+            }`}
           defaultValue={value}
         />
 

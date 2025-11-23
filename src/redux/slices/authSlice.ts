@@ -1,6 +1,7 @@
 import { createSlice, PayloadAction } from '@reduxjs/toolkit';
 
 interface AuthState {
+  uuid: string | null;
   name: string | null;
   surname: string | null;
   father_name: string | null;
@@ -10,6 +11,7 @@ interface AuthState {
 }
 
 const initialState: AuthState = {
+  uuid: null,
   name: null,
   surname: null,
   father_name: null,
@@ -27,6 +29,7 @@ const authSlice = createSlice({
       action: PayloadAction<{
         token: string;
         alumni?: {
+          uuid?: string;
           name?: string;
           surname?: string;
           father_name?: string;
@@ -36,6 +39,7 @@ const authSlice = createSlice({
       }>
     ) => {
       const user = action.payload.alumni || {};
+      state.uuid = user.uuid || null;
       state.name = user.name || null;
       state.surname = user.surname || null;
       state.father_name = user.father_name || null;
@@ -45,6 +49,7 @@ const authSlice = createSlice({
     },
     logout: () => initialState,
     clearLoginSteps: (state: AuthState) => {
+      state.uuid = null;
       state.fin_code = null;
       state.name = null;
       state.surname = null;

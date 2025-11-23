@@ -3,7 +3,10 @@ import { createSlice, PayloadAction } from "@reduxjs/toolkit";
 interface SignupState {
   fname: string;
   lname: string;
+  fatherName: string;
   email: string;
+  gender: string;
+  birthDate: string;
   password: string;
   degree: string;
   major: string;
@@ -14,7 +17,10 @@ interface SignupState {
 const initialState: SignupState = {
   fname: "",
   lname: "",
+  fatherName: "",
   email: "",
+  gender: "",
+  birthDate: "",
   password: "",
   degree: "",
   major: "",

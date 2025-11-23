@@ -1,14 +1,16 @@
 import { useState } from "react";
 import Label from "../form/Label";
+import Select from "../form/Select";
 import Button from "../ui/button/Button";
 import Input from "../form/input/InputField";
+import DatePicker from "../form/date-picker";
+import { RootState } from "../../redux/store";
 import { EyeIcon, EyeCloseIcon } from "../../icons";
 import { useDispatch, useSelector } from "react-redux";
-import { RootState } from "../../redux/store";
 import { setSignupData } from "../../redux/slices/signupSlice";
 
 interface StepOneSignUpProps {
-  onNext: (data: { fname: string; lname: string; email: string; password: string }) => void;
+  onNext: (data: { fname: string; lname: string; fatherName: string; gender: string; birthDate: string; email: string; password: string }) => void;
 }
 
 export default function StepOneSignUp({ onNext }: StepOneSignUpProps) {
@@ -24,19 +26,36 @@ export default function StepOneSignUp({ onNext }: StepOneSignUpProps) {
   const signup = useSelector((state: RootState) => state.signup);
 
   const [name, setName] = useState(signup.fname);
-  const [surname, setSurname] = useState(signup.lname);
   const [email, setEmail] = useState(signup.email);
+  const [gender, setGender] = useState(signup.gender);
+  const [surname, setSurname] = useState(signup.lname);
   const [password, setPassword] = useState(signup.password);
+  const [birthDate, setBirthDate] = useState(signup.birthDate);
+  const [fatherName, setFathername] = useState(signup.fatherName);
 
   const [error, setError] = useState("");
   const [showPassword, setShowPassword] = useState(false);
+
+  const genderOptions = [
+    {
+      value: "Kişi",
+      label: "Kişi"
+    }, {
+      value: "Qadın",
+      label: "Qadın"
+    }
+  ];
+
+  const genderOnChange = (value: string) => {
+    setGender(value);
+  }
 
   const dispatch = useDispatch();
 
   const handleNext = (e: React.FormEvent) => {
     e.preventDefault();
 
-    if (!name || !surname || !email || !password) {
+    if (!name || !surname || !email || !password || !fatherName) {
       setError("Bütün sahələr doldurulmalıdır.");
       return;
     }
@@ -46,6 +65,9 @@ export default function StepOneSignUp({ onNext }: StepOneSignUpProps) {
     dispatch(setSignupData({
       fname: name,
       lname: surname,
+      fatherName: fatherName,
+      gender: gender,
+      birthDate: birthDate,
       email,
       password,
     }));
@@ -53,6 +75,9 @@ export default function StepOneSignUp({ onNext }: StepOneSignUpProps) {
     onNext({
       fname: name,
       lname: surname,
+      fatherName: fatherName,
+      gender: gender,
+      birthDate: birthDate,
       email,
       password,
     });
@@ -63,7 +88,7 @@ export default function StepOneSignUp({ onNext }: StepOneSignUpProps) {
       <h2 className="text-2xl font-semibold mb-4">Addım 1: Şəxsi məlumatlar</h2>
       {error && <p className="text-red-500 mb-3">{error}</p>}
       <form className="space-y-5 w-full" onSubmit={handleNext}>
-        <div className="grid grid-cols-1 gap-5 sm:grid-cols-2">
+        <div className="grid grid-cols-1 gap-5 sm:grid-cols-3">
           <div>
             <Label>Ad<span className="text-error-500">&nbsp;*</span></Label>
             <Input
@@ -84,10 +109,42 @@ export default function StepOneSignUp({ onNext }: StepOneSignUpProps) {
               placeholder="Soyad"
             />
           </div>
+          <div>
+            <Label>Ata adı<span className="text-error-500">&nbsp;*</span></Label>
+            <Input
+              type="text"
+              name="fatherName"
+              value={fatherName}
+              onChange={(e) => setFathername(capitalizeWords(e.target.value))}
+              placeholder="Ata adı"
+            />
+          </div>
         </div>
 
         <div>
-          <Label>Email<span className="text-error-500">*</span></Label>
+          <Label>Cinsiniz<span className="text-error-500">&nbsp;*</span></Label>
+          <Select
+            options={genderOptions}
+            onChange={genderOnChange}
+            value={gender}
+            placeholder="Cinsinizi seçin"
+          />
+        </div>
+
+        <div>
+          <Label>Doğum tarixi<span className="text-error-500">*</span></Label>
+          <DatePicker
+            id="end-date"
+            placeholder="Doğum tarixi seçin"
+            value={birthDate}
+            onChange={(_, currentDateString) => {
+              setBirthDate(currentDateString || "");
+            }}
+          />
+        </div>
+
+        <div>
+          <Label>Email<span className="text-error-500">&nbsp;*</span></Label>
           <Input
             type="email"
             name="email"
@@ -98,7 +155,7 @@ export default function StepOneSignUp({ onNext }: StepOneSignUpProps) {
         </div>
 
         <div>
-          <Label>Password<span className="text-error-500">*</span></Label>
+          <Label>Password<span className="text-error-500">&nbsp;*</span></Label>
           <div className="relative">
             <Input
               type={showPassword ? "text" : "password"}

@@ -1,5 +1,4 @@
 import InfoIcon from '@mui/icons-material/Info';
-import PersonIcon from '@mui/icons-material/Person';
 import HistoryIcon from '@mui/icons-material/History';
 import { useLocation, useNavigate } from 'react-router';
 import SettingsIcon from '@mui/icons-material/Settings';
@@ -20,7 +19,8 @@ export default function BottomNavigation() {
             display: "flex",
             marginTop: "30px",
             alignItems: "center",
-            justifyContent: "center"
+            justifyContent: "center",
+            zIndex: 100
         }}>
             <div
                 className='flex justify-between items-center w-full h-full bg-white border-t border-gray-200 px-5'>

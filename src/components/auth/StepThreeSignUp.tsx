@@ -1,10 +1,10 @@
 import Swal from "sweetalert2";
 import { useState } from "react";
 import Label from "../form/Label";
+import Button from "../ui/button/Button";
 import { useSelector } from "react-redux";
 import { ChevronLeftIcon } from "../../icons";
 import { RootState } from "../../redux/store";
-import Button from "../ui/button/Button";
 import { signup, SignupPayload } from "../../services/authentication/authenticationService";
 
 interface StepThreeSignUpProps {
@@ -26,8 +26,8 @@ export default function StepThreeSignUp({ onNext, onBack }: StepThreeSignUpProps
       name: signupDatas.fname,
       surname: signupDatas.lname,
       father_name: signupDatas.lname,
-      gender: "Kişi",
-      birth_date: "2025-10-11",
+      gender: signupDatas.gender,
+      birth_date: signupDatas.birthDate,
       major_code: signupDatas.major,
       email: signupDatas.email,
       password: signupDatas.password,
@@ -109,6 +109,18 @@ export default function StepThreeSignUp({ onNext, onBack }: StepThreeSignUpProps
             <div>
               <Label className="font-bold">Ata adı</Label>
               <p className="mt-1 text-gray-800 dark:text-white">{signupDatas.lname}</p>
+            </div>
+          </div>
+
+          <div className="flex items-center justify-between border-b p-5">
+            <div>
+              <Label className="font-bold">Cinsiniz</Label>
+              <p className="mt-1 text-gray-800 dark:text-white">{signupDatas.gender}</p>
+            </div>
+
+            <div>
+              <Label className="font-bold">Doğum tarixi</Label>
+              <p className="mt-1 text-gray-800 dark:text-white">{signupDatas.birthDate}</p>
             </div>
           </div>
 
