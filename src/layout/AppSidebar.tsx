@@ -2,6 +2,7 @@ import WorkIcon from '@mui/icons-material/Work';
 import { Link, useLocation } from "react-router";
 import SchoolIcon from '@mui/icons-material/School';
 import PeopleIcon from '@mui/icons-material/People';
+import WorkOutlineIcon from '@mui/icons-material/WorkOutline';
 import { useCallback, useEffect, useRef, useState } from "react";
 
 import {
@@ -44,6 +45,25 @@ const navItems: NavItem[] = [
     name: "Məzunlar",
     icon: <PeopleIcon />,
     path: "/alumnis"
+  },
+  {
+    name: "Vakansiyalar",
+    icon: <WorkOutlineIcon />,
+    subItems: [
+      {
+        name: "Vakansiyalar",
+        path: "/vacancy",
+        pro: false
+      }, {
+        name: "Vakansiya kateqoriyaları",
+        path: "/vacancy-categories",
+        pro: false
+      }, {
+        name: "Yeni Vakansiya",
+        path: "/new-vacancy",
+        pro: false
+      }
+    ]
   }
 ];
 
