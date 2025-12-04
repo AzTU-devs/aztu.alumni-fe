@@ -8,6 +8,7 @@ interface AuthState {
   fin_code: string | null;
   email: string | null;
   token: string | null;
+  profile_completed_percentage: number | null;
 }
 
 const initialState: AuthState = {
@@ -17,7 +18,8 @@ const initialState: AuthState = {
   father_name: null,
   fin_code: null,
   email: null,
-  token: null
+  token: null,
+  profile_completed_percentage: null
 };
 
 const authSlice = createSlice({
@@ -35,6 +37,7 @@ const authSlice = createSlice({
           father_name?: string;
           fin_code?: string;
           email?: string;
+          profile_completed_percentage?: number;
         };
       }>
     ) => {
@@ -46,6 +49,10 @@ const authSlice = createSlice({
       state.fin_code = user.fin_code || null;
       state.email = user.email || null;
       state.token = action.payload.token || null;
+      state.profile_completed_percentage = user.profile_completed_percentage || null
+    },
+    setProfileCompleted: (state: AuthState) => {
+      state.profile_completed_percentage = 100;
     },
     logout: () => initialState,
     clearLoginSteps: (state: AuthState) => {
@@ -56,6 +63,7 @@ const authSlice = createSlice({
       state.father_name = null;
       state.token = null;
       state.email = null;
+      state.profile_completed_percentage = null;
     },
   },
 });
@@ -63,6 +71,7 @@ const authSlice = createSlice({
 export const {
   loginSuccess,
   clearLoginSteps,
-  logout
+  logout,
+  setProfileCompleted
 } = authSlice.actions;
 export default authSlice.reducer;

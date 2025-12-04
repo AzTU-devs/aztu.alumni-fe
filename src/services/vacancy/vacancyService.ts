@@ -19,9 +19,43 @@ export interface VacancyInterface {
     created_at: string;
 }
 
-export const getVacancies = async (start: number, end: number) => {
+export interface VacancyPayload {
+    category_code: string;
+    job_title: string;
+    company: string;
+    working_hours: string;
+    job_location_type: number;
+    employment_type: number;
+    country: string;
+    city: string;
+    salary_min: number;
+    salary_max: number;
+    currency: number;
+    is_salary_public: boolean
+    deadline: string;
+    status: number
+}
+
+export const getVacancies = async (
+    start: number,
+    end: number,
+    search?: string,
+    employment_type?: number,
+    job_location_type?: number,
+    vacancy_category?: string
+) => {
     try {
-        const response = await apiClient.get(`/api/vacancy/all?start=${start}&end=${end}`);
+        const params = new URLSearchParams();
+
+        params.append("start", start.toString());
+        params.append("end", end.toString());
+
+        if (search) params.append("search", search);
+        if (employment_type !== undefined) params.append("employment_type", employment_type.toString());
+        if (job_location_type !== undefined) params.append("job_location_type", job_location_type.toString());
+        if (vacancy_category) params.append("vacancy_category", vacancy_category);
+
+        const response = await apiClient.get(`/api/vacancy/all?${params.toString()}`);
 
         if (response.data.status_code === 200) {
             return response.data.vacancy;
@@ -31,6 +65,83 @@ export const getVacancies = async (start: number, end: number) => {
             return "ERROR";
         }
     } catch (err: any) {
+        return "ERROR";
+    }
+};
+
+export const createVacancy = async (payload?: any) => {
+    try {
+        const response = await apiClient.post("/api/vacancy/create", payload);
+
+        if (response.data.status_code === 201) {
+            return "SUCCESS";
+        }
+    } catch (err: any) {
+        if (err.response?.status === 404) {
+            return "NOT FOUND";
+        }
+        return "ERROR";
+    }
+};
+
+// categories
+
+export interface VacancyCategoriesInterface {
+    category_code: string;
+    title: string;
+    created_at: string;
+}
+
+export interface UpdateVacancyCategoryPayload {
+    category_code: string;
+    title: string;
+}
+
+export interface CreateVacancyCategory {
+    title: string;
+}
+
+export const createVacancyCategory = async (payload: CreateVacancyCategory) => {
+    try {
+        const response = await apiClient.post("/api/vacancy/category/create", payload);
+
+        if (response.data.status_code === 201) {
+            return "SUCCESS";
+        }
+    } catch (err: any) {
+        if (err.response?.status === 409) {
+            return "CONFLICT";
+        }
+        return "ERROR";
+    }
+}
+
+export const getVacancyCategories = async () => {
+    try {
+        const response = await apiClient.get("/api/vacancy/category/all");
+
+        if (response.data.status_code === 200) {
+            return response.data.categories;
+        } else if (response.data.status_code === 204) {
+            return "NO CONTENT";
+        }
+    } catch (err: any) {
+        return "ERROR";
+    }
+};
+
+export const updateVacancyCategory = async (payload: UpdateVacancyCategoryPayload) => {
+    try {
+        const response = await apiClient.put("/api/vacancy/category/update", payload);
+
+        if (response.data.status_code === 200) {
+            return "SUCCESS";
+        }
+    } catch (err: any) {
+        if (err.response?.status === 404) {
+            return "NOT FOUND";
+        }
+
         return "ERROR";
     }
 }

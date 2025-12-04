@@ -1,19 +1,18 @@
 import Swal from "sweetalert2";
 import Label from "../form/Label";
+import { useEffect } from "react";
 import Select from "../form/Select";
-import { Link, useNavigate } from "react-router";
 import React, { useState } from "react";
 import Button from "../ui/button/Button";
-import { useSelector } from "react-redux";
 import Input from "../form/input/InputField";
 import DatePicker from "../form/date-picker";
 import Checkbox from "../form/input/Checkbox";
-import TextArea from "../form/input/TextArea";
-import { RootState } from "../../redux/store";
+import { Link, useNavigate } from "react-router";
 import ChevronLeftIcon from '@mui/icons-material/ChevronLeft';
-import { createEducation, EducationPayload } from "../../services/education/educationService";
+import { VacancyCategoriesInterface, VacancyPayload, createVacancy, getVacancyCategories } from "../../services/vacancy/vacancyService";
 
 export default function NewVacancy() {
+  const navigate = useNavigate();
   function capitalizeWords(str: string): string {
     return str
       .split(" ")
@@ -44,78 +43,32 @@ export default function NewVacancy() {
   const [selectedCategory, setSelectedCategory] = useState("");
   const [employmentType, setEmploymentType] = useState<number>();
   const [selectedLocationType, setSelectedLocationType] = useState<number>();
+  const [categories, setCategories] = useState<VacancyCategoriesInterface[]>([]);
 
 
+  useEffect(() => {
+    setLoading(true);
+    getVacancyCategories()
+      .then((res) => {
+        if (Array.isArray(res)) {
+          setCategories(res);
+        } else {
+          setCategories([]);
+        }
+      })
+      .finally(() => {
+        setLoading(false);
+      })
+  }, []);
 
-  // const handleSubmit = async (e: React.FormEvent) => {
-  //   e.preventDefault();
-  //   setLoading(true);
-  //   if (!university || !major || !degree || !startDate) {
-  //     Swal.fire({
-  //       icon: 'error',
-  //       title: 'Xəta baş verdi',
-  //       text: 'Zəhmət olmasa bütün məcburi sahələri doldurun.',
-  //       confirmButtonText: 'OK'
-  //     });
-  //     setLoading(false);
-  //     return;
-  //   }
-  //   try {
-  //     const educationPayload: EducationPayload = {
-  //       uuid: uuid ? uuid : "",
-  //       university: university,
-  //       start_date: startDate,
-  //       end_date: endDate,
-  //       degree: degree,
-  //       major: major,
-  //       gpa: gpa
-  //     };
+  const categoryOptions = categories.map((category) => ({
+    value: category.category_code,
+    label: category.title
+  }));
 
-  //     const result = await createEducation(educationPayload);
-
-  //     if (result === "SUCCESS") {
-  //       Swal.fire({
-  //         icon: 'success',
-  //         title: 'Uğurlu!',
-  //         text: 'Təhsil məlumatlarınız əlavə olundu.',
-  //         timer: 2000
-  //       }).then(() => {
-  //         setLoading(false);
-  //         navigate("/educations");
-  //       });
-  //     } else if (result === "ERROR") {
-  //       Swal.fire({
-  //         icon: 'error',
-  //         title: 'Xəta baş verdi',
-  //         text: 'Təhsil məlumatları əlavə edilə bilmədi. Zəhmət olmasa yenidən cəhd edin.',
-  //         confirmButtonText: 'OK'
-  //       }).then(() => {
-  //         setLoading(false);
-  //       });
-  //     } else if (result === "NOT FOUND") {
-  //       Swal.fire({
-  //         icon: 'warning',
-  //         title: 'Tapılmadı',
-  //         text: 'Sistem məlumatları tapa bilmədi.',
-  //         confirmButtonText: 'OK'
-  //       }).then(() => {
-  //         setLoading(false);
-  //       });
-  //     }
-  //   } catch (err: any) {
-  //     Swal.fire({
-  //       icon: 'error',
-  //       title: 'Şəbəkə xətası',
-  //       text: 'Xəta baş verdi. İnternet bağlantınızı yoxlayın.',
-  //       confirmButtonText: 'OK'
-  //     }).then(() => {
-  //       setLoading(false);
-  //     });
-  //   } finally {
-  //     setLoading(false);
-  //   }
-  // };
-
+  const categoryOnChange = (value: string) => {
+    setSelectedCategory(value);
+  }
   const locationSelect = [
     {
       label: "Ofisdə",
@@ -162,6 +115,61 @@ export default function NewVacancy() {
     setEmploymentType(+value);
   };
 
+  const handleCreateVacancy = async (e: React.FormEvent) => {
+    e.preventDefault();
+
+    try {
+      const payload: VacancyPayload = {
+        category_code: selectedCategory,
+        job_title: jobTitle,
+        company: company,
+        working_hours: `${startHour} - ${endHour}`,
+        job_location_type: selectedLocationType || 0,
+        employment_type: employmentType || 0,
+        country: country,
+        city: city,
+        salary_min: minSalary || 0,
+        salary_max: maxSalary || 0,
+        currency: Number(currency) || 0,
+        is_salary_public: isSalaryPublic,
+        deadline: deadline,
+        status: status || 0
+      };
+
+      const result = await createVacancy(payload);
+
+      if (result === "SUCCESS") {
+        Swal.fire({
+          icon: "success",
+          title: "Uğurlu!",
+          text: "Vakansiya uğurla yaradıldı",
+          timer: 1500,
+          showConfirmButton: false
+        }).then(() => {
+          navigate("/vacancy")
+        })
+      } else if (result === "NOT FOUND") {
+        Swal.fire({
+          icon: "error",
+          title: "Xəta!",
+          text: "Kateqoriya tapılmadı"
+        });
+      } else {
+        Swal.fire({
+          icon: "error",
+          title: "Xəta!",
+          text: "Vakansiya yaradılarkən xəta baş verdi"
+        });
+      }
+    } catch (err) {
+      Swal.fire({
+        icon: "error",
+        title: "Xəta!",
+        text: "Vakansiya yaradılarkən gözlənilməz xəta baş verdi"
+      });
+    }
+  }
+
   return (
     <div className="w-full flex flex-col items-start justify-start p-5">
       <Link to={"/vacancy"}>
@@ -173,7 +181,7 @@ export default function NewVacancy() {
         </div>
       </Link>
       {/* {error && <p className="text-red-500 mb-3">{error}</p>} */}
-      <form className="space-y-5 w-full">
+      <form className="space-y-5 w-full" onSubmit={handleCreateVacancy}>
         <div>
           <Label>İş başlığı<span className="text-error-500">&nbsp;*</span></Label>
           <Input
@@ -182,6 +190,15 @@ export default function NewVacancy() {
             value={jobTitle}
             onChange={(e) => setJobTitle(capitalizeWords(e.target.value))}
             placeholder="nüm. Azərbaycan Texniki Universiteti"
+          />
+        </div>
+
+        <div>
+          <Label>Kateqoriya<span className="text-error-500">&nbsp;*</span></Label>
+          <Select
+            placeholder="Kateqoriya seçin"
+            options={categoryOptions}
+            onChange={categoryOnChange}
           />
         </div>
 
@@ -195,15 +212,6 @@ export default function NewVacancy() {
             placeholder="nüm. Kompüter elmləri"
           />
         </div>
-
-        {/* <div>
-          <Label>Öl<span className="text-error-500">&nbsp;*</span></Label>
-          <Select
-            options={degreeOptions}
-            onChange={degreeOnChange}
-            placeholder="nüm. Bakalavr"
-          />
-        </div> */}
 
         <div>
           <Label>Ölkə<span className="text-error-500">&nbsp;*</span></Label>
@@ -309,16 +317,16 @@ export default function NewVacancy() {
         </div>
 
         <div>
-            <Label>Müraciət üçün son tarix<span className="text-error-500">&nbsp;*</span></Label>
-            <DatePicker
-              id="end-date"
-              placeholder="Doğum tarixi seçin"
-              value={deadline}
-              onChange={(_, currentDateString) => {
-                setDeadline(currentDateString || "");
-              }}
-            />
-          </div>
+          <Label>Müraciət üçün son tarix<span className="text-error-500">&nbsp;*</span></Label>
+          <DatePicker
+            id="end-date"
+            placeholder="Doğum tarixi seçin"
+            value={deadline}
+            onChange={(_, currentDateString) => {
+              setDeadline(currentDateString || "");
+            }}
+          />
+        </div>
 
         {/* <div>
           <Label>Qeyd<span className="text-gray-400">&nbsp;(İstəyə bağlı)</span></Label>

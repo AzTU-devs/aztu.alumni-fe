@@ -1,17 +1,36 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import ExpandLessIcon from '@mui/icons-material/ExpandLess';
 import ExpandMoreIcon from '@mui/icons-material/ExpandMore';
 import MenuIcon from '@mui/icons-material/Menu';
 import CloseIcon from '@mui/icons-material/Close';
+import { getVacancyCategories, VacancyCategoriesInterface } from "../../services/vacancy/vacancyService";
 
-export default function VacancyFilter() {
+export default function VacancyFilter({ onApply }: { onApply: (filters: any) => void }) {
     const [jobTypeOpen, setJobTypeOpen] = useState(true);
+    const [loading, setLoading] = useState(false);
     const [jobLocationOpen, setJobLocationOpen] = useState(true);
     const [sidebarOpen, setSidebarOpen] = useState(false);
-
+    const [categories, setCategories] = useState<VacancyCategoriesInterface[]>([]);
     const [selectedJobTypes, setSelectedJobTypes] = useState<number[]>([]);
     const [selectedJobLocations, setSelectedJobLocations] = useState<number[]>([]);
+    const [selectedCategories, setSelectedCategories] = useState<string[]>([]);
+    const [categoryOpen, setCategoryOpen] = useState(true);
+
+    useEffect(() => {
+            setLoading(true);
+            getVacancyCategories()
+                .then((res) => {
+                    if (Array.isArray(res)) {
+                        setCategories(res);
+                    } else {
+                        setCategories([]);
+                    }
+                })
+                .finally(() => {
+                    setLoading(false);
+                })
+        }, []);
 
     const jobTypes = [
         { id: 1, label: "Tam zamanlı" },
@@ -40,6 +59,7 @@ export default function VacancyFilter() {
     const clearFilters = () => {
         setSelectedJobTypes([]);
         setSelectedJobLocations([]);
+        setSelectedCategories([]);
     };
 
     const animationProps = {
@@ -49,7 +69,10 @@ export default function VacancyFilter() {
         transition: { duration: 0.3 },
     };
 
-    const hasFilters = selectedJobTypes.length > 0 || selectedJobLocations.length > 0;
+    const hasFilters =
+        selectedJobTypes.length > 0 ||
+        selectedJobLocations.length > 0 ||
+        selectedCategories.length > 0;
 
     return (
         <>
@@ -128,8 +151,58 @@ export default function VacancyFilter() {
                     </AnimatePresence>
                 </div>
 
+                {/* Kateqoriya Section */}
+                <div className="mb-4">
+                    <button
+                        onClick={() => setCategoryOpen(!categoryOpen)}
+                        className="w-full text-left font-medium flex justify-between items-center px-3 py-2 bg-blue-50 rounded-md hover:bg-blue-100 transition"
+                    >
+                        Kateqoriya
+                        <span>{categoryOpen ? <ExpandLessIcon /> : <ExpandMoreIcon />}</span>
+                    </button>
+
+                    <AnimatePresence initial={false}>
+                        {categoryOpen && (
+                            <motion.div {...animationProps} className="mt-2 space-y-1 pl-2 overflow-hidden max-h-60 overflow-y-auto">
+                                {loading && <p className="text-sm text-gray-400">Yüklənir...</p>}
+
+                                {!loading && categories.length === 0 && (
+                                    <p className="text-sm text-gray-400">Kateqoriya yoxdur</p>
+                                )}
+
+                                {categories.map((cat) => (
+                                    <label key={cat.category_code} className="flex items-center gap-2">
+                                        <input
+                                            type="checkbox"
+                                            checked={selectedCategories.includes(cat.category_code)}
+                                            onChange={() =>
+                                                toggleSelection(
+                                                    cat.category_code as any,
+                                                    selectedCategories as any,
+                                                    setSelectedCategories as any
+                                                )
+                                            }
+                                            className="form-checkbox h-4 w-4 text-blue-600"
+                                        />
+                                        {cat.title}
+                                    </label>
+                                ))}
+                            </motion.div>
+                        )}
+                    </AnimatePresence>
+                </div>
+
                 <div className='flex flex-col items-center w-full'>
-                    <button className='w-full border border-[#CDD9FA] p-2 rounded-[10px] bg-[#E8EEFC] text-[#4167E9] mb-2'>
+                    <button
+                        onClick={() =>
+                            onApply({
+                                jobTypes: selectedJobTypes,
+                                jobLocations: selectedJobLocations,
+                                categories: selectedCategories
+                            })
+                        }
+                        className='w-full border border-[#CDD9FA] p-2 rounded-[10px] bg-[#E8EEFC] text-[#4167E9] mb-2'
+                    >
                         Filteri tətbiq et
                     </button>
 

@@ -12,6 +12,7 @@ import {
   UserCircleIcon,
 } from "../icons";
 import { useSidebar } from "../context/SidebarContext";
+import ProfileComplete from '../components/profileProgress/ProfileProgress';
 
 type NavItem = {
   name: string;
@@ -39,7 +40,7 @@ const navItems: NavItem[] = [
   {
     icon: <WorkIcon />,
     name: "İş məlumatlarım",
-    path: "/experience",
+    path: "/experiences",
   },
   {
     name: "Məzunlar",
@@ -332,6 +333,7 @@ const AppSidebar: React.FC = () => {
               </h2>
               {renderMenuItems(othersItems, "others")}
             </div> */}
+            {isExpanded ? <ProfileComplete /> : null}
           </div>
         </nav>
       </div>

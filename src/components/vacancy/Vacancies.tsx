@@ -1,11 +1,12 @@
+import { Link } from "react-router";
+import { Skeleton } from "@mui/material";
 import { useEffect, useState } from "react";
+import VacancyFilter from "./VacancyFilter";
+import SearchIcon from '@mui/icons-material/Search';
 import BookmarkIcon from '@mui/icons-material/Bookmark';
 import LocationOnIcon from '@mui/icons-material/LocationOn';
 import BookmarkBorderIcon from '@mui/icons-material/BookmarkBorder';
 import { getVacancies, VacancyInterface } from "../../services/vacancy/vacancyService";
-import VacancyFilter from "./VacancyFilter";
-import VacancySearch from "./VacancySearch";
-import { Skeleton } from "@mui/material";
 
 export default function Vacancies() {
   const [end, setEnd] = useState(10);
@@ -13,10 +14,27 @@ export default function Vacancies() {
   const [savedIds, setSavedIds] = useState<Set<string>>(new Set());
   const [vacancies, setVacancies] = useState<VacancyInterface[]>([]);
   const [loading, setLoading] = useState(false);
+  const [search, setSearch] = useState("");
+  const [filters, setFilters] = useState<{
+    jobTypes: number[];
+    jobLocations: number[];
+    categories: string[];
+  }>({
+    jobTypes: [],
+    jobLocations: [],
+    categories: []
+  });
 
   useEffect(() => {
     setLoading(true);
-    getVacancies(start, end)
+    getVacancies(
+      start,
+      end,
+      search,
+      filters.jobTypes[0],
+      filters.jobLocations[0],
+      filters.categories[0]
+    )
       .then((res) => {
         if (Array.isArray(res)) {
           setVacancies(res);
@@ -27,7 +45,7 @@ export default function Vacancies() {
       .finally(() => {
         setLoading(false);
       })
-  }, []);
+  }, [search, filters, start, end]);
 
   const toggleSaving = (id: string) => {
     setSavedIds(prev => {
@@ -64,12 +82,31 @@ export default function Vacancies() {
 
   return (
     <>
-      <div className="mb-6 px-4 sm:px-6 lg:px-8">
-        <VacancySearch />
+      <div className="overflow-hidden rounded-xl border border-gray-200 bg-white dark:border-white/[0.05] dark:bg-white/[0.03] p-5 w-full">
+        <div className="relative w-full">
+          <SearchIcon
+            className="absolute left-3 top-1/2 -translate-y-1/2 text-gray-400"
+            fontSize="small"
+          />
+
+          <input
+            value={search}
+            onChange={(e) => setSearch(e.target.value)}
+            className="bg-[#F5F5F7] outline-none w-full py-3 pl-10 pr-3 rounded-[10px]"
+            placeholder="Ad, E-poçt, ixtisas və digər məlumatlarla axtarış edin"
+          />
+        </div>
       </div>
+      {/* <div className="mb-6 px-4 sm:px-6 lg:px-8">
+        <VacancySearch />
+      </div> */}
       <div className="flex flex-col sm:flex-row sm:space-x-6 px-4 sm:px-6 lg:px-8">
         <div className="w-full sm:w-1/4 mb-6 sm:mb-0">
-          <VacancyFilter />
+          <VacancyFilter
+            onApply={(data) => {
+              setFilters(data);
+            }}
+          />
         </div>
         <div className="w-full sm:w-3/4">
           {loading ? (
@@ -126,9 +163,14 @@ export default function Vacancies() {
                       {formatDate(vacancy.created_at)}
                     </div>
                     <div>
-                      <button className='border border-[#CDD9FA] p-2 rounded-lg bg-[#E8EEFC] text-[#4167E9] hover:bg-[#d7e0fa] transition'>
-                        Ətraflı məlumat
-                      </button>
+                      <Link
+                        to={`/vacancy/${vacancy.vacancy_code}`}
+                        state={{ vacancy }}
+                      >
+                        <button className='border border-[#CDD9FA] p-2 rounded-lg bg-[#E8EEFC] text-[#4167E9] hover:bg-[#d7e0fa] transition'>
+                          Ətraflı məlumat
+                        </button>
+                      </Link>
                     </div>
                   </div>
                 </div>
