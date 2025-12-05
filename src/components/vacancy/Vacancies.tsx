@@ -25,6 +25,9 @@ export default function Vacancies() {
     categories: []
   });
 
+  setStart(0);
+  setEnd(10);
+
   useEffect(() => {
     setLoading(true);
     getVacancies(

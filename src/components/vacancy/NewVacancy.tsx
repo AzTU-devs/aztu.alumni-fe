@@ -24,7 +24,7 @@ export default function NewVacancy() {
       .join(" ");
   }
 
-  const [loading, setLoading] = useState(false);
+  const [_, setLoading] = useState(false);
   const [isChecked, setIsChecked] = useState(false);
   const [flexIsChecked, setFlexIsChecked] = useState(false);
 
@@ -122,6 +122,9 @@ export default function NewVacancy() {
   const handleCreateVacancy = async (e: React.FormEvent) => {
     e.preventDefault();
     setSubmitLoading(true);
+    setCurrency("1");
+    setIsSalaryPublic(true);
+    setStatus(1);
 
     try {
       const payload: VacancyPayload = {

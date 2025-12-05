@@ -10,15 +10,15 @@ function Stepper({ currentStep }: { currentStep: number }) {
   return (
     <div className="flex items-center w-full max-w-md mb-4">
       {steps.map((step, index) => {
-        const isCompleted = currentStep > step;
-        const isActive = currentStep === step;
+        // const isCompleted = currentStep > step;
+        // const isActive = currentStep === step;
 
-        let lineFill = 0;
-        if (currentStep > step) {
-          lineFill = 100; // fully filled
-        } else if (currentStep === step) {
-          lineFill = 0; // start filling next segment only after step increment
-        }
+        // let lineFill = 0;
+        // if (currentStep > step) {
+        //   lineFill = 100; // fully filled
+        // } else if (currentStep === step) {
+        //   lineFill = 0; // start filling next segment only after step increment
+        // }
 
         return (
           <div key={step} className={`flex items-center ${index < steps.length - 1 ? 'flex-1' : ''}`}>

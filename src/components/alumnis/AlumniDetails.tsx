@@ -6,7 +6,7 @@ import { Education, getEducations } from "../../services/education/educationServ
 export default function UserMetaCard() {
     const { uuid } = useParams<{ uuid: string }>();
 
-    const [error, setError] = useState(false);
+    const [_, setError] = useState(false);
     const [loading, setLoading] = useState(false);
     const [alumni, setALumni] = useState<Alumni>();
     const [notFound, setNotFound] = useState(false);

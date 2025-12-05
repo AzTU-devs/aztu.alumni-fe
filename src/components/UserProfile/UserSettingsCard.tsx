@@ -16,7 +16,7 @@ export default function UserSettingsCard() {
     const name = useSelector((state: RootState) => state.auth.name);
     const email = useSelector((state: RootState) => state.auth.email);
     const surname = useSelector((state: RootState) => state.auth.surname);
-    const finCode = useSelector((state: RootState) => state.auth.fin_code);
+    // const finCode = useSelector((state: RootState) => state.auth.fin_code);
     const father_name = useSelector((state: RootState) => state.auth.father_name);
 
     return (

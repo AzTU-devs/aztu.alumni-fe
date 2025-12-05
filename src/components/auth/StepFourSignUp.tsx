@@ -6,7 +6,7 @@ import { useSelector } from "react-redux";
 import Input from "../form/input/InputField";
 import { ChevronLeftIcon } from "../../icons";
 import { RootState } from "../../redux/store";
-import { useLocation, useNavigate } from "react-router";
+import { useNavigate } from "react-router";
 import { verifySignup, VerifySignupPayload } from "../../services/authentication/authenticationService";
 
 interface StepFourSignUpProps {
@@ -15,7 +15,7 @@ interface StepFourSignUpProps {
 
 export default function StepFourSignUp({ onBack }: StepFourSignUpProps) {
     const navigate = useNavigate();
-    const location = useLocation();
+    // const location = useLocation();
     const [loading, setLoading] = useState(false);
     const [otp, setOtp] = useState(["", "", "", "", "", ""]);
     const signupDatas = useSelector((state: RootState) => state.signup);
