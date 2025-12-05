@@ -1,33 +1,34 @@
-import { useEffect, useState } from "react";
+import { useEffect, useRef } from "react";
 import Button from "../ui/button/Button";
 import { useLocation } from "react-router-dom";
 import ShareIcon from '@mui/icons-material/Share';
-import { getRequirements, Requirements } from "../../services/vacancyRequirements/vacancyRequirementsService";
+// import { getRequirements, Requirements } from "../../services/vacancyRequirements/vacancyRequirementsService";
+
+const listStyles = {
+  ul: { listStyleType: "disc", paddingLeft: "1.5rem", marginTop: "0.5rem", marginBottom: "0.5rem" },
+  ol: { listStyleType: "decimal", paddingLeft: "1.5rem", marginTop: "0.5rem", marginBottom: "0.5rem" }
+};
 
 export default function VacancyDetails() {
     const location = useLocation();
     const vacancy = location.state?.vacancy;
-    const [loading, setLoading] = useState(false);
-    const [requirements, setRequirements] = useState<Requirements[]>([]);
+    // const [loading, setLoading] = useState(false);
+    const contentRef = useRef<HTMLDivElement>(null);
+
+    useEffect(() => {
+        if (contentRef.current) {
+            contentRef.current.querySelectorAll("ul").forEach((el) => {
+                Object.assign(el.style, listStyles.ul);
+            });
+            contentRef.current.querySelectorAll("ol").forEach((el) => {
+                Object.assign(el.style, listStyles.ol);
+            });
+        }
+    }, [vacancy.html_content]);
 
     if (!vacancy) {
         return <div>No vacancy data available.</div>;
     }
-
-    useEffect(() => {
-        setLoading(true);
-        getRequirements(vacancy.vacancy_code)
-            .then((res) => {
-                if (Array.isArray(res)) {
-                    setRequirements(res);
-                } else {
-                    setRequirements([]);
-                }
-            })
-            .finally(() => {
-                setLoading(false);
-            })
-    }, []);
 
     return (
         <>
@@ -45,16 +46,12 @@ export default function VacancyDetails() {
                     </div>
                 </div>
             </div>
-            <div>
-                <h2>Tələblər</h2>
-                <ul className="list-none">
-                    {requirements.map((requirement, index) => (
-                        <li key={index} className="flex items-center gap-2 mt-[10px] font-bold text-[18px]">
-                            <span>{requirement.title}</span>
-                        </li>
-                    ))}
-                </ul>
-            </div>
+            <div
+                ref={contentRef}
+                className="max-w-full dark:prose-invert"
+                style={{ whiteSpace: "pre-wrap" }}
+                dangerouslySetInnerHTML={{ __html: vacancy.html_content || "" }}
+            />
         </>
     );
 }

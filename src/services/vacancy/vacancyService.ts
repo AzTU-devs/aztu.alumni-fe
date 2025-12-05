@@ -16,6 +16,8 @@ export interface VacancyInterface {
     is_salary_public: string;
     deadline: string;
     status: number;
+    description: string;
+    html_content: string;
     created_at: string;
 }
 
@@ -31,9 +33,11 @@ export interface VacancyPayload {
     salary_min: number;
     salary_max: number;
     currency: number;
-    is_salary_public: boolean
+    is_salary_public: boolean;
     deadline: string;
-    status: number
+    status: number;
+    description: string;
+    html_content: string;
 }
 
 export const getVacancies = async (
@@ -145,3 +149,34 @@ export const updateVacancyCategory = async (payload: UpdateVacancyCategoryPayloa
         return "ERROR";
     }
 }
+
+export const deleteCategory = async (categoryCode: string) => {
+    try {
+        const response = await apiClient.delete(
+            `/api/vacancy/category/${categoryCode.toString()}/delete`
+        );
+
+        if (response.data?.status_code === 200) {
+            return "SUCCESS";
+        }
+
+        return `ERROR_${response.status}`;
+    } catch (error: any) {
+
+        const status = error?.response?.status;
+
+        if (status === 404) {
+            return "NOT_FOUND";
+        }
+
+        if (status === 500) {
+            return "SERVER_ERROR";
+        }
+
+        if (status) {
+            return `ERROR_${status}`;
+        }
+
+        return "UNKNOWN_ERROR";
+    }
+};

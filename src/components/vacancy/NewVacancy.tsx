@@ -7,9 +7,11 @@ import Button from "../ui/button/Button";
 import Input from "../form/input/InputField";
 import DatePicker from "../form/date-picker";
 import Checkbox from "../form/input/Checkbox";
+import TextArea from "../form/input/TextArea";
 import { Link, useNavigate } from "react-router";
 import ChevronLeftIcon from '@mui/icons-material/ChevronLeft';
 import { VacancyCategoriesInterface, VacancyPayload, createVacancy, getVacancyCategories } from "../../services/vacancy/vacancyService";
+import Editor from "../editor/Editor";
 
 export default function NewVacancy() {
   const navigate = useNavigate();
@@ -27,7 +29,6 @@ export default function NewVacancy() {
   const [flexIsChecked, setFlexIsChecked] = useState(false);
 
   //
-
   const [city, setCity] = useState("");
   const [company, setCompany] = useState("");
   const [endHour, setEndHour] = useState("");
@@ -37,8 +38,11 @@ export default function NewVacancy() {
   const [deadline, setDeadline] = useState("");
   const [startHour, setStartHour] = useState("");
   const [status, setStatus] = useState<number>();
+  const [description, setDescription] = useState("");
+  const [htmlContent, setHtmlContent] = useState("");
   const [minSalary, setMinSalary] = useState<number>();
   const [maxSalary, setMaxSalary] = useState<number>();
+  const [submitLoading, setSubmitLoading] = useState(false);
   const [isSalaryPublic, setIsSalaryPublic] = useState(true);
   const [selectedCategory, setSelectedCategory] = useState("");
   const [employmentType, setEmploymentType] = useState<number>();
@@ -117,6 +121,7 @@ export default function NewVacancy() {
 
   const handleCreateVacancy = async (e: React.FormEvent) => {
     e.preventDefault();
+    setSubmitLoading(true);
 
     try {
       const payload: VacancyPayload = {
@@ -133,7 +138,9 @@ export default function NewVacancy() {
         currency: Number(currency) || 0,
         is_salary_public: isSalaryPublic,
         deadline: deadline,
-        status: status || 0
+        status: status || 0,
+        description: description,
+        html_content: htmlContent
       };
 
       const result = await createVacancy(payload);
@@ -146,19 +153,24 @@ export default function NewVacancy() {
           timer: 1500,
           showConfirmButton: false
         }).then(() => {
-          navigate("/vacancy")
+          navigate("/vacancy");
+          setSubmitLoading(false);
         })
       } else if (result === "NOT FOUND") {
         Swal.fire({
           icon: "error",
           title: "Xəta!",
           text: "Kateqoriya tapılmadı"
+        }).then(() => {
+          setSubmitLoading(false);
         });
       } else {
         Swal.fire({
           icon: "error",
           title: "Xəta!",
           text: "Vakansiya yaradılarkən xəta baş verdi"
+        }).then(() => {
+          setSubmitLoading(false);
         });
       }
     } catch (err) {
@@ -166,7 +178,9 @@ export default function NewVacancy() {
         icon: "error",
         title: "Xəta!",
         text: "Vakansiya yaradılarkən gözlənilməz xəta baş verdi"
-      });
+      }).then(() => {
+          setSubmitLoading(false);
+        });
     }
   }
 
@@ -328,20 +342,36 @@ export default function NewVacancy() {
           />
         </div>
 
+        <div>
+          <Label>Deskripsiya<span className="text-error-500">&nbsp;*</span></Label>
+          <TextArea
+            value={description}
+            onChange={(value: string) => {
+              setDescription(value);
+            }}
+          />
+        </div>
+
+
         {/* <div>
           <Label>Qeyd<span className="text-gray-400">&nbsp;(İstəyə bağlı)</span></Label>
           <TextArea
-            placeholder="Qeyd"
-            value={description}
-            onChange={(value: string) => setDescription(capitalizeWords(value))}
+          placeholder="Qeyd"
+          value={description}
+          onChange={(value: string) => setDescription(capitalizeWords(value))}
           />
-        </div> */}
+          </div> */}
 
+        <div onKeyDown={(e) => {
+          if (e.key === "Enter") e.stopPropagation();
+        }}>
+          <Editor onUpdate={(html: string) => setHtmlContent(html)} />
+        </div>
         <Button
-          disabled={loading}
+          disabled={submitLoading}
           className="w-full px-4 py-3 text-white bg-blue-500 rounded-lg hover:bg-blue-600"
         >
-          {loading ? "Yadda saxlanılır" : "Yadda saxla"}
+          {submitLoading ? "Yadda saxlanılır" : "Yadda saxla"}
         </Button>
       </form>
     </div>

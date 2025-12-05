@@ -5,23 +5,24 @@ import {
     TableHeader,
     TableBody
 } from "../ui/table";
+import Swal from "sweetalert2";
 import Label from "../form/Label";
-import { Link } from "react-router";
 import { Modal } from "../ui/modal";
 import Button from "../ui/button/Button";
-import React, { useEffect, useState } from "react";
+import { useEffect, useState } from "react";
 import Input from "../form/input/InputField";
 import Skeleton from '@mui/material/Skeleton';
 import AddIcon from '@mui/icons-material/Add';
 import { useModal } from "../../hooks/useModal";
 import CreateIcon from '@mui/icons-material/Create';
+import CircularProgress from '@mui/material/CircularProgress';
 import DeleteOutlineIcon from '@mui/icons-material/DeleteOutline';
-import { createVacancyCategory, CreateVacancyCategory, getVacancyCategories, updateVacancyCategory, UpdateVacancyCategoryPayload, VacancyCategoriesInterface } from "../../services/vacancy/vacancyService";
-import Swal from "sweetalert2";
+import { createVacancyCategory, CreateVacancyCategory, deleteCategory, getVacancyCategories, updateVacancyCategory, UpdateVacancyCategoryPayload, VacancyCategoriesInterface } from "../../services/vacancy/vacancyService";
 
 export default function VacancyCategories() {
     const [title, setTitle] = useState("");
     const [loading, setLoading] = useState(false);
+    const [deletingId, setDeletingId] = useState<string | null>(null);
     const [updateLoading, setUpdateLoading] = useState(false);
     const [categories, setCategories] = useState<VacancyCategoriesInterface[]>([]);
     const [selectedCategory, setSelectedCategory] = useState<VacancyCategoriesInterface | null>(null);
@@ -100,6 +101,51 @@ export default function VacancyCategories() {
             });
         }
     };
+
+    const handleDelete = async (categoryCode: string) => {
+        setDeletingId(categoryCode);
+        try {
+            const result = await deleteCategory(categoryCode);
+
+            if (result === "SUCCESS") {
+                Swal.fire({
+                    icon: "success",
+                    title: "Uğurlu",
+                    text: "Kateqoriya uğurla silindi"
+                }).then(() => {
+                    setDeletingId(null);
+                    setCategories(prev => prev.filter(cat => cat.category_code !== categoryCode));
+                });
+            } else if (result === "NOT_FOUND") {
+                Swal.fire({
+                    icon: "error",
+                    title: "Xəta!",
+                    text: "Kateqoriya tapılmadı"
+                }).then(() => {
+                    setDeletingId(null);
+                    setCategories(prev => prev.filter(cat => cat.category_code !== categoryCode));
+                });
+            } else {
+                Swal.fire({
+                    icon: "error",
+                    title: "Xəta!",
+                    text: "Silmə zamanı xəta baş verdi"
+                }).then(() => {
+                    setDeletingId(null);
+                    setCategories(prev => prev.filter(cat => cat.category_code !== categoryCode));
+                });
+            }
+        } catch (err: any) {
+            Swal.fire({
+                icon: "error",
+                title: "Xəta!",
+                text: "Silmə zamanı xəta baş verdi"
+            }).then(() => {
+                setDeletingId(null);
+                setCategories(prev => prev.filter(cat => cat.category_code !== categoryCode));
+            });
+        }
+    }
 
    const handleVacancCreate = async () => {
     setUpdateLoading(true);
@@ -253,8 +299,15 @@ export default function VacancyCategories() {
                                             >
                                                 <CreateIcon sx={{ color: "#4167E9" }} />
                                             </div>
-                                            <div className="border-1 border-[#CA4C3F] p-2 rounded-[10px] bg-[#F3D5D2] cursor-pointer">
-                                                <DeleteOutlineIcon sx={{ color: "#CA4C3F" }} />
+                                            <div
+                                                className="border-1 border-[#CA4C3F] p-2 rounded-[10px] bg-[#F3D5D2] cursor-pointer flex items-center justify-center"
+                                                onClick={() => handleDelete(category.category_code)}
+                                            >
+                                               {deletingId === category.category_code ? (
+                                                    <CircularProgress size={20} thickness={5} />
+                                                ) : (
+                                                    <DeleteOutlineIcon sx={{ color: "#CA4C3F" }} />
+                                                )}
                                             </div>
                                         </TableCell>
                                     </TableRow>
@@ -264,7 +317,7 @@ export default function VacancyCategories() {
                                     <TableCell
                                         className="text-center py-8 text-gray-500 dark:text-gray-400"
                                     >
-                                        No alumni found.
+                                        Kateqoriya tapılmadı
                                     </TableCell>
                                 </TableRow>
                             )}

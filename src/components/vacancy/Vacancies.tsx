@@ -71,7 +71,7 @@ export default function Vacancies() {
       d1.getFullYear() === d2.getFullYear();
 
     if (isSameDay(date, today)) return "Bugün";
-    if (isSameDay(date, yesterday)) return "Yesterday";
+    if (isSameDay(date, yesterday)) return "Dünən";
 
     const day = String(date.getDate()).padStart(2, "0");
     const month = String(date.getMonth() + 1).padStart(2, "0");
@@ -139,12 +139,15 @@ export default function Vacancies() {
                     <div>
                       <h2 className="text-blue-900 font-bold text-lg sm:text-xl mb-1">{vacancy.job_title}</h2>
                       <p className="text-gray-600 mb-1">{vacancy.company}</p>
-                      <div className="flex items-center text-gray-600">
-                        <LocationOnIcon sx={{ color: "gray" }} />
+                      <div className="flex items-center text-[#a3a3a3] font-[200]">
+                        <LocationOnIcon sx={{ color: "#a3a3a3" }} />
                         <p className="ml-1">
                           {vacancy.city}, {vacancy.country}
                         </p>
                       </div>
+                      <p className="mt-[10px]">
+                        {vacancy.description}
+                      </p>
                     </div>
                     <div className="mt-4 sm:mt-0 cursor-pointer">
                       {savedIds.has(vacancy.vacancy_code) ? (
