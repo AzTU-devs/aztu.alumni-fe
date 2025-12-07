@@ -6,7 +6,6 @@ import Input from "../form/input/InputField";
 import { RootState } from "../../redux/store";
 import { useModal } from "../../hooks/useModal";
 import CameraAltIcon from '@mui/icons-material/CameraAlt';
-import DropzoneComponent from "../form/form-elements/DropZone";
 
 export default function UserMetaCard() {
   const {
