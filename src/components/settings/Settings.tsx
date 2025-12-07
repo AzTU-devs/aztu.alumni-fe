@@ -22,9 +22,9 @@ export default function Settings() {
     const navigate = useNavigate();
     const [_, setError] = useState(false);
     const [toggle, setToggle] = useState(false);
-    const [loading, setLoading] = useState(false);
+    const [__, setLoading] = useState(false);
     const [alumni, setALumni] = useState<Alumni>();
-    const [notFound, setNotFound] = useState(false);
+    const [___, setNotFound] = useState(false);
     const handleSwitchChange = (checked: boolean) => {
         console.log("Switch is now:", checked ? "ON" : "OFF");
     };

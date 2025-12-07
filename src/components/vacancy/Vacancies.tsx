@@ -13,8 +13,10 @@ import { getVacancies, saveVacancy, SaveVacancyPaload, VacancyInterface } from "
 
 export default function Vacancies() {
   const uuid = useSelector((state: RootState) => state.auth.uuid);
-  const [end, setEnd] = useState(10);
-  const [start, setStart] = useState(0);
+  // const [end, setEnd] = useState(10);
+  // const [start, setStart] = useState(0);
+  const end = 10;
+  const start = 0;
   const [savedIds, setSavedIds] = useState<Set<string>>(new Set());
   const [vacancies, setVacancies] = useState<VacancyInterface[]>([]);
   const [loading, setLoading] = useState(false);
