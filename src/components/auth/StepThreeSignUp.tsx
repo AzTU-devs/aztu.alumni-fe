@@ -76,7 +76,7 @@ export default function StepThreeSignUp({ onNext, onBack }: StepThreeSignUpProps
 
   return (
     <form onSubmit={handleSubmit} className="flex flex-col w-full overflow-y-auto no-scrollbar">
-      <div className="w-[60%] mx-auto mb-5 sm:pt-10">
+      <div className="w-full max-w-2xl mx-auto mb-5 sm:pt-10 px-3 sm:px-6">
         <button
           onClick={onBack}
           className="inline-flex items-center text-sm text-gray-500 transition-colors hover:text-gray-700 dark:text-gray-400 dark:hover:text-gray-300"
@@ -85,7 +85,7 @@ export default function StepThreeSignUp({ onNext, onBack }: StepThreeSignUpProps
         </button>
       </div>
 
-      <div className="flex flex-col justify-center flex-1 w-[60%] mx-auto">
+      <div className="flex flex-col justify-center flex-1 w-full max-w-2xl mx-auto px-3 sm:px-6">
         <div className="mb-5 sm:mb-8">
           <h1 className="mb-2 font-semibold text-gray-800 text-title-sm dark:text-white/90 sm:text-title-md">
             Məlumatlarınızı doğrulayın
@@ -95,44 +95,44 @@ export default function StepThreeSignUp({ onNext, onBack }: StepThreeSignUpProps
           </p>
         </div>
 
-        <div className="space-y-4 bg-white dark:bg-gray-900 rounded-lg border border-gray-200 dark:border-gray-700">
-          <div className="flex items-center justify-between border-b p-5">
+        <div className="space-y-4 bg-white dark:bg-gray-900 rounded-lg border border-gray-200 dark:border-gray-700 overflow-hidden">
+          <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4 sm:gap-0 border-b p-5">
             <div>
               <Label className="font-bold">Ad</Label>
-              <p className="mt-1 text-gray-800 dark:text-white">{signupDatas.fname}</p>
+              <p className="mt-1 text-gray-800 dark:text-white w-full sm:w-auto">{signupDatas.fname}</p>
             </div>
 
             <div>
               <Label className="font-bold">Soyad</Label>
-              <p className="mt-1 text-gray-800 dark:text-white">{signupDatas.lname}</p>
+              <p className="mt-1 text-gray-800 dark:text-white w-full sm:w-auto">{signupDatas.lname}</p>
             </div>
             <div>
               <Label className="font-bold">Ata adı</Label>
-              <p className="mt-1 text-gray-800 dark:text-white">{signupDatas.lname}</p>
+              <p className="mt-1 text-gray-800 dark:text-white w-full sm:w-auto">{signupDatas.lname}</p>
             </div>
           </div>
 
-          <div className="flex items-center justify-between border-b p-5">
+          <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4 sm:gap-0 border-b p-5">
             <div>
               <Label className="font-bold">Cinsiniz</Label>
-              <p className="mt-1 text-gray-800 dark:text-white">{signupDatas.gender}</p>
+              <p className="mt-1 text-gray-800 dark:text-white w-full sm:w-auto">{signupDatas.gender}</p>
             </div>
 
             <div>
               <Label className="font-bold">Doğum tarixi</Label>
-              <p className="mt-1 text-gray-800 dark:text-white">{signupDatas.birthDate}</p>
+              <p className="mt-1 text-gray-800 dark:text-white w-full sm:w-auto">{signupDatas.birthDate}</p>
             </div>
           </div>
 
-          <div className="flex items-center justify-between border-b p-5">
+          <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4 sm:gap-0 border-b p-5">
             <div>
               <Label className="font-bold">E-poçt</Label>
-              <p className="mt-1 text-gray-800 dark:text-white">{signupDatas.email}</p>
+              <p className="mt-1 text-gray-800 dark:text-white w-full sm:w-auto">{signupDatas.email}</p>
             </div>
 
             <div>
               <Label className="font-bold">Şifrə</Label>
-              <div className="flex items-center gap-3">
+              <div className="flex flex-col sm:flex-row items-start sm:items-center gap-2 sm:gap-3 w-full sm:w-auto">
                 <p className="mt-1 text-gray-800 dark:text-white">
                   {showPassword ? signupDatas.password : "••••••••"}
                 </p>
@@ -147,36 +147,36 @@ export default function StepThreeSignUp({ onNext, onBack }: StepThreeSignUpProps
             </div>
           </div>
 
-          <div className="flex items-center justify-between border-b p-5">
+          <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4 sm:gap-0 border-b p-5">
             <div>
               <Label className="font-bold">Təhsil pilləsi</Label>
-              <p className="mt-1 text-gray-800 dark:text-white">{signupDatas.degree}</p>
+              <p className="mt-1 text-gray-800 dark:text-white w-full sm:w-auto">{signupDatas.degree}</p>
             </div>
 
             <div>
               <Label className="font-bold">İxtisas</Label>
-              <p className="mt-1 text-gray-800 dark:text-white">{signupDatas.major}</p>
+              <p className="mt-1 text-gray-800 dark:text-white w-full sm:w-auto">{signupDatas.major}</p>
             </div>
           </div>
 
-          <div className="flex items-center justify-between p-5">
+          <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4 sm:gap-0 p-5">
             <div>
               <Label className="font-bold">Başlanğıc tarixi</Label>
-              <p className="mt-1 text-gray-800 dark:text-white">{signupDatas.startDate}</p>
+              <p className="mt-1 text-gray-800 dark:text-white w-full sm:w-auto">{signupDatas.startDate}</p>
             </div>
 
             <div>
               <Label className="font-bold">Bitirmə tarixi</Label>
-              <p className="mt-1 text-gray-800 dark:text-white">{signupDatas.endDate}</p>
+              <p className="mt-1 text-gray-800 dark:text-white w-full sm:w-auto">{signupDatas.endDate}</p>
             </div>
           </div>
         </div>
 
-        <Button disabled={loading} className="mt-[10px]">
+        <Button disabled={loading} className="mt-4 w-full px-4 py-3 text-base sm:text-lg">
           {loading ? "Təsdiqlənir..." : "Təsdiqlə"}
         </Button>
 
-        <p className="text-sm font-normal text-center text-gray-700 dark:text-gray-400 mt-5">
+        <p className="text-sm sm:text-base font-normal text-center text-gray-700 dark:text-gray-400 mt-4 sm:mt-5 px-2 sm:px-0">
           Hər hansı bir məlumatda dəyişiklik etmək üçün əvvəlki addıma qayıdın və dəyişiklik edin.
         </p>
       </div>

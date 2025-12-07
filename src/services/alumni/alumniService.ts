@@ -124,4 +124,28 @@ export const completeProfile = async (payload: CompleteProfilePayload) => {
 
     return "ERROR";
   }
-}
+};
+
+export const uploadUserProfilePhoto = async (uuid: string, file: File) => {
+  try {
+    const formData = new FormData();
+    formData.append("uuid", uuid);
+    formData.append("file", file);
+
+    const response = await apiClient.post("/api/profile-photo/upload", formData);
+
+    if (response.data?.status_code === 201) {
+      return { status: "SUCCESS", data: response.data };
+    }
+
+    return { status: "ERROR", data: null };
+
+  } catch (error: any) {
+    const status = error?.response?.status;
+
+    if (status === 404) return { status: "NOT_FOUND", data: null };
+    if (status === 400) return { status: "INVALID_FILE", data: null };
+
+    return { status: "ERROR", data: null };
+  }
+};

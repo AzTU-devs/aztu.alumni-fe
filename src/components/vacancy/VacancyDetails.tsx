@@ -5,8 +5,8 @@ import ShareIcon from '@mui/icons-material/Share';
 // import { getRequirements, Requirements } from "../../services/vacancyRequirements/vacancyRequirementsService";
 
 const listStyles = {
-  ul: { listStyleType: "disc", paddingLeft: "1.5rem", marginTop: "0.5rem", marginBottom: "0.5rem" },
-  ol: { listStyleType: "decimal", paddingLeft: "1.5rem", marginTop: "0.5rem", marginBottom: "0.5rem" }
+    ul: { listStyleType: "disc", paddingLeft: "1.5rem", marginTop: "0.5rem", marginBottom: "0.5rem" },
+    ol: { listStyleType: "decimal", paddingLeft: "1.5rem", marginTop: "0.5rem", marginBottom: "0.5rem" }
 };
 
 export default function VacancyDetails() {
@@ -46,12 +46,11 @@ export default function VacancyDetails() {
                     </div>
                 </div>
             </div>
-            <div
-                ref={contentRef}
-                className="max-w-full dark:prose-invert"
-                style={{ whiteSpace: "pre-wrap" }}
-                dangerouslySetInnerHTML={{ __html: vacancy.html_content || "" }}
-            />
+                <div
+                    ref={contentRef}
+                    className="max-w-full dark:prose-invert bg-white p-5 rounded-[10px]"
+                    dangerouslySetInnerHTML={{ __html: vacancy.html_content || "" }}
+                />
         </>
     );
 }

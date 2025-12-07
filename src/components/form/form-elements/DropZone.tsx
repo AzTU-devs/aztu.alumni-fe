@@ -1,11 +1,14 @@
-// import ComponentCard from "../../common/ComponentCard";
 import { useDropzone } from "react-dropzone";
-// import Dropzone from "react-dropzone";
 
-const DropzoneComponent: React.FC = () => {
+interface DropzoneComponentProps {
+  onFileSelect: (file: File) => void;
+}
+
+const DropzoneComponent: React.FC<DropzoneComponentProps> = ({ onFileSelect }) => {
   const onDrop = (acceptedFiles: File[]) => {
-    console.log("Files dropped:", acceptedFiles);
-    // Handle file uploads here
+    if (acceptedFiles && acceptedFiles.length > 0) {
+      onFileSelect(acceptedFiles[0]); // pass the first file to parent
+    }
   };
 
   const { getRootProps, getInputProps, isDragActive } = useDropzone({
@@ -16,25 +19,22 @@ const DropzoneComponent: React.FC = () => {
       "image/webp": [],
       "image/svg+xml": [],
     },
+    multiple: false,
   });
+
   return (
     <div className="transition border border-gray-300 border-dashed cursor-pointer dark:hover:border-brand-500 dark:border-gray-700 rounded-xl hover:border-brand-500">
-      <form
+      <div
         {...getRootProps()}
-        className={`dropzone rounded-xl   border-dashed border-gray-300 p-7 lg:p-10
-        ${isDragActive
+        className={`dropzone rounded-xl border-dashed border-gray-300 p-7 lg:p-10
+          ${isDragActive
             ? "border-brand-500 bg-gray-100 dark:bg-gray-800"
             : "border-gray-300 bg-gray-50 dark:border-gray-700 dark:bg-gray-900"
           }
-      `}
-        id="demo-upload"
+        `}
       >
-        {/* Hidden Input */}
         <input {...getInputProps()} />
-
-        <div className="dz-message flex flex-col items-center m-0!">
-          {/* Icon Container */}
-          <div className="mb-[22px] flex justify-center">
+        <div className="mb-[22px] flex justify-center">
             <div className="flex h-[68px] w-[68px]  items-center justify-center rounded-full bg-gray-200 text-gray-700 dark:bg-gray-800 dark:text-gray-400">
               <svg
                 className="fill-current"
@@ -65,8 +65,7 @@ const DropzoneComponent: React.FC = () => {
             Faylları aç
           </span>
         </div>
-      </form>
-    </div>
+      </div>
   );
 };
 

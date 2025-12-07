@@ -3,6 +3,7 @@ import HistoryIcon from '@mui/icons-material/History';
 import { useLocation, useNavigate } from 'react-router';
 import SettingsIcon from '@mui/icons-material/Settings';
 import HomeFilledIcon from '@mui/icons-material/HomeFilled';
+import BookmarkBorderIcon from '@mui/icons-material/BookmarkBorder';
 
 export default function BottomNavigation() {
     const path = useLocation();
@@ -55,9 +56,9 @@ export default function BottomNavigation() {
                     ) : null}
                 </div>
                 <div
-                    onClick={() => { navigate("/user/history") }}
+                    onClick={() => { navigate("/vacancy/saved") }}
                     className='flex justify-center items-center'
-                    style={path.pathname === "/user/history" ? {
+                    style={path.pathname === "/vacancy/saved" ? {
                         width: "calc(100% / 3)",
                         padding: "5px 8px",
                         transition: "all 400ms",
@@ -67,7 +68,7 @@ export default function BottomNavigation() {
                         width: "calc(100% / 4)",
                         transition: "all 400ms"
                     }}>
-                    <HistoryIcon style={path.pathname === "/user/history" ?
+                    <BookmarkBorderIcon style={path.pathname === "/vacancy/saved" ?
                         {
                             color: "rgb(199, 172, 49)",
                             fontSize: 30,
@@ -77,39 +78,10 @@ export default function BottomNavigation() {
                             fontSize: 30,
                             marginRight: 5
                         }} />
-                    {path.pathname === "/user/history" ? (
+                    {path.pathname === "/vacancy/saved" ? (
                         <p style={{
                             color: "rgb(199, 172, 49)"
-                        }}>History</p>
-                    ) : null}
-                </div>
-                <div
-                    onClick={() => { navigate('/user/about') }}
-                    className='flex justify-center items-center'
-                    style={path.pathname === "/user/about" ? {
-                        width: "calc(100% / 3)",
-                        padding: "5px 8px",
-                        transition: "all 400ms",
-                        borderRadius: 20,
-                        backgroundColor: "rgb(205, 240, 199)"
-                    } : {
-                        width: "calc(100% / 4)",
-                        transition: "all 400ms"
-                    }}>
-                    <InfoIcon style={path.pathname === "/user/about" ?
-                        {
-                            color: "rgb(133, 186, 111)",
-                            fontSize: 30,
-                            marginRight: 5
-                        } : {
-                            color: "rgba(0, 0, 0, 0.4)",
-                            fontSize: 30,
-                            marginRight: 5
-                        }} />
-                    {path.pathname === "/user/about" ? (
-                        <p style={{
-                            color: "rgb(133, 186, 111)"
-                        }}>About</p>
+                        }}>Saxlanılmış vakansiyalar</p>
                     ) : null}
                 </div>
                 <div

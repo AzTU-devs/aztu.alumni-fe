@@ -20,6 +20,7 @@ export default function SignInForm() {
 
   const handleSignin = async (e: React.FormEvent) => {
     e.preventDefault();
+    
     setLoading(true);
     const signinPayload: SigninPayload = {
       email,
@@ -28,6 +29,9 @@ export default function SignInForm() {
 
     try {
       const result = await signin(signinPayload);
+
+      console.log(result);
+      
 
       if (typeof result === "string") {
         switch (result) {

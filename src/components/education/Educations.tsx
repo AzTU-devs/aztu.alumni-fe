@@ -61,7 +61,7 @@ export default function Educations() {
                                 <div className="absolute left-[5px] top-5 bottom-2 w-px bg-gray-300"></div>
                             )}
                             <div className="w-3 h-3 bg-gray-400 rounded-full flex-shrink-0 z-10"></div>
-                            <div className="border-1 border-gray-200 p-5 rounded-[10px] bg-white dark:bg-gray-800">
+                            <div className="border-1 border-gray-200 p-5 rounded-[10px] bg-white dark:bg-gray-800 w-full">
                                 <h4 className="text-gray-800 dark:text-gray-200 font-semibold">
                                     {edu.university}
                                 </h4>
