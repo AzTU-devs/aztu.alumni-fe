@@ -8,6 +8,7 @@ interface AuthState {
   fin_code: string | null;
   email: string | null;
   token: string | null;
+  role: number | null;
   profile_completed_percentage: number | null;
 }
 
@@ -19,6 +20,7 @@ const initialState: AuthState = {
   fin_code: null,
   email: null,
   token: null,
+  role: null,
   profile_completed_percentage: null
 };
 
@@ -37,6 +39,7 @@ const authSlice = createSlice({
           father_name?: string;
           fin_code?: string;
           email?: string;
+          role?: number;
           profile_completed_percentage?: number;
         };
       }>
@@ -49,6 +52,7 @@ const authSlice = createSlice({
       state.fin_code = user.fin_code || null;
       state.email = user.email || null;
       state.token = action.payload.token || null;
+      state.role = action.payload.alumni?.role || null;
       state.profile_completed_percentage = user.profile_completed_percentage || null
     },
     setProfileCompleted: (state: AuthState) => {
@@ -63,6 +67,7 @@ const authSlice = createSlice({
       state.father_name = null;
       state.token = null;
       state.email = null;
+      state.role = null;
       state.profile_completed_percentage = null;
     },
   },

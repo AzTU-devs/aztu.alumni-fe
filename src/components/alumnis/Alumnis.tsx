@@ -13,6 +13,8 @@ import SearchIcon from '@mui/icons-material/Search';
 import RemoveRedEyeIcon from '@mui/icons-material/RemoveRedEye';
 import DeleteOutlineIcon from '@mui/icons-material/DeleteOutline';
 import { AlumnisInterface, getAlumnis } from "../../services/alumni/alumniService";
+import { useSelector } from "react-redux";
+import { RootState } from "../../redux/store";
 
 export default function Alumnis() {
   const pageSize = 5;
@@ -21,6 +23,7 @@ export default function Alumnis() {
   const [total, setTotal] = useState<number>();
   const [loading, setLoading] = useState(false);
   const [alumnis, setAlumnis] = useState<AlumnisInterface[]>([]);
+  const role = useSelector((state: RootState) => state.auth.role);
 
   useEffect(() => {
     setLoading(true);
@@ -40,7 +43,13 @@ export default function Alumnis() {
       .finally(() => setLoading(false));
   }, [page, search]);
 
-  console.log(alumnis);
+  if (role === 1) {
+    return (
+      <div className="text-red-600 w-full flex items-center justify-center">
+        Sizin bu səhifəyə giriş icazəniz yoxdur.
+      </div>
+    )
+  }
 
   return (
     <>
@@ -182,7 +191,17 @@ export default function Alumnis() {
                       {alumni.email}
                     </TableCell>
                     <TableCell className="px-4 py-3 text-gray-500 text-start text-theme-sm dark:text-gray-400">
-                      {alumni.created_at}
+                      {alumni.created_at
+                        ? new Date(alumni.created_at).toLocaleString('en-GB', {
+                          day: '2-digit',
+                          month: '2-digit',
+                          year: 'numeric',
+                          hour: '2-digit',
+                          minute: '2-digit',
+                          second: '2-digit',
+                          hour12: false
+                        }).replace(',', '')
+                        : '-'}
                     </TableCell>
                     <TableCell className="px-4 py-3 text-gray-500 text-start text-theme-sm dark:text-gray-400">
                       {alumni.last_login

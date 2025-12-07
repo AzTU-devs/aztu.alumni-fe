@@ -1,11 +1,12 @@
 import { useState } from "react";
-import { useSelector } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import { useNavigate } from "react-router";
 import { RootState } from "../../redux/store";
 import { Dropdown } from "../ui/dropdown/Dropdown";
 import { logout } from "../../redux/slices/authSlice";
 
 export default function UserDropdown() {
+  const dispatch = useDispatch();
   const navigate = useNavigate();
   const [isOpen, setIsOpen] = useState(false);
   const user = useSelector((state: RootState) => state.auth);
@@ -88,7 +89,7 @@ export default function UserDropdown() {
         </ul> */}
         <div
         onClick={() => {
-          logout();
+          dispatch(logout());
           navigate("/signin");
         }}
           className="flex items-center gap-3 px-3 py-2 mt-3 font-medium text-gray-700 rounded-lg group text-theme-sm hover:bg-gray-100 hover:text-gray-700 dark:text-gray-400 dark:hover:bg-white/5 dark:hover:text-gray-300"

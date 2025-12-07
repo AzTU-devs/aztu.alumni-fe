@@ -4,6 +4,7 @@ import SchoolIcon from '@mui/icons-material/School';
 import PeopleIcon from '@mui/icons-material/People';
 import WorkOutlineIcon from '@mui/icons-material/WorkOutline';
 import { useCallback, useEffect, useRef, useState } from "react";
+import BookmarkBorderIcon from '@mui/icons-material/BookmarkBorder';
 
 import {
   ChevronDownIcon,
@@ -13,6 +14,8 @@ import {
 } from "../icons";
 import { useSidebar } from "../context/SidebarContext";
 import ProfileComplete from '../components/profileProgress/ProfileProgress';
+import { useSelector } from 'react-redux';
+import { RootState } from '../redux/store';
 
 type NavItem = {
   name: string;
@@ -21,11 +24,17 @@ type NavItem = {
   subItems?: { name: string; path: string; pro?: boolean; new?: boolean }[];
 };
 
+
 const navItems: NavItem[] = [
   {
     icon: <GridIcon />,
     name: "Əsas",
     path: "/"
+  },
+  {
+    icon: <BookmarkBorderIcon />,
+    name: "Saxlanılmış vakansiyalar",
+    path: "/vacancy/saved"
   },
   {
     icon: <UserCircleIcon />,
@@ -74,6 +83,8 @@ const othersItems: NavItem[] = [
 const AppSidebar: React.FC = () => {
   const { isExpanded, isMobileOpen, isHovered, setIsHovered } = useSidebar();
   const location = useLocation();
+
+  const role = useSelector((state: RootState) => state.auth.role);
 
   const [openSubmenu, setOpenSubmenu] = useState<{
     type: "main" | "others";
@@ -274,28 +285,44 @@ const AppSidebar: React.FC = () => {
         <Link to="/">
           {isExpanded || isHovered || isMobileOpen ? (
             <>
+              <div className='flex items-center'>
+                <img
+                  className="dark:hidden mr-[10px]"
+                  src="/images/logo/aztu-logo-dark.png"
+                  alt="Logo"
+                  width={70}
+                  height={40}
+                />
+                <p className='dark:hidden font-bold text-[20px] text-center'>Aztu mezun portali</p>
+              </div>
+              <div className='flex items-center'>
+                <img
+                  className="hidden dark:block"
+                  src="/images/logo/aztu-light-logo.png"
+                  alt="Logo"
+                  width={70}
+                  height={40}
+                />
+                <p className='hidden dark:block font-bold text-[20px] text-center text-[white]'>Aztu mezun portali</p>
+              </div>
+            </>
+          ) : (
+            <>
               <img
                 className="dark:hidden"
-                src="/images/logo/logo.svg"
-                alt="Logo"
-                width={150}
-                height={40}
+                src="/images/logo/aztu-logo-dark.png"
+                alt="Azərbaycan Texniki Universiteti"
+                width={32}
+                height={32}
               />
               <img
                 className="hidden dark:block"
-                src="/images/logo/logo-dark.svg"
-                alt="Logo"
-                width={150}
-                height={40}
+                src="/images/logo/aztu-light-logo.png"
+                alt="Azərbaycan Texniki Universiteti"
+                width={32}
+                height={32}
               />
             </>
-          ) : (
-            <img
-              src="/images/logo/logo-icon.svg"
-              alt="Logo"
-              width={32}
-              height={32}
-            />
           )}
         </Link>
       </div>
@@ -315,7 +342,12 @@ const AppSidebar: React.FC = () => {
                   <HorizontaLDots className="size-6" />
                 )}
               </h2>
-              {renderMenuItems(navItems, "main")}
+              {renderMenuItems(navItems.filter(item => {
+                if (item.name === "Məzunlar" || item.name === "Vakansiyalar") {
+                  return role === 2 || role === 3;
+                }
+                return true;
+              }), "main")}
             </div>
             {/* <div className="">
               <h2

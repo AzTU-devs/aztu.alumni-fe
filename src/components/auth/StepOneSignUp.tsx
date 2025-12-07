@@ -9,8 +9,20 @@ import { EyeIcon, EyeCloseIcon } from "../../icons";
 import { useDispatch, useSelector } from "react-redux";
 import { setSignupData } from "../../redux/slices/signupSlice";
 
+  const sanitizeNameInput = (value: string) => {
+    return value.replace(/[^A-Za-zƏəÇçĞğİıÖöŞşÜü\s]/g, "");
+  };
+
 interface StepOneSignUpProps {
-  onNext: (data: { fname: string; lname: string; fatherName: string; gender: string; birthDate: string; email: string; password: string }) => void;
+  onNext: (data: {
+    fname: string;
+    lname: string;
+    fatherName: string;
+    gender: string;
+    birthDate: string;
+    email: string;
+    password: string;
+  }) => void;
 }
 
 export default function StepOneSignUp({ onNext }: StepOneSignUpProps) {
@@ -84,44 +96,44 @@ export default function StepOneSignUp({ onNext }: StepOneSignUpProps) {
   };
 
   return (
-    <div className="w-full flex flex-col items-center justify-center p-5">
-      <h2 className="text-2xl font-semibold mb-4">Addım 1: Şəxsi məlumatlar</h2>
-      {error && <p className="text-red-500 mb-3">{error}</p>}
-      <form className="space-y-5 w-full" onSubmit={handleNext}>
-        <div className="grid grid-cols-1 gap-5 sm:grid-cols-3">
-          <div>
+    <div className="w-full max-w-6xl flex flex-col items-center justify-center px-4 py-6 sm:px-6 md:px-10 mx-auto">
+      <h2 className="text-xl sm:text-2xl md:text-3xl font-semibold mb-6 text-center">Addım 1: Şəxsi məlumatlar</h2>
+      {error && <p className="text-red-500 mb-4 text-center">{error}</p>}
+      <form className="space-y-6 w-full" onSubmit={handleNext}>
+        <div className="grid grid-cols-1 gap-4 sm:grid-cols-2 lg:grid-cols-3">
+          <div className="w-full">
             <Label>Ad<span className="text-error-500">&nbsp;*</span></Label>
             <Input
               type="text"
               name="fname"
               value={name}
-              onChange={(e) => setName(capitalizeWords(e.target.value))}
+              onChange={(e) => setName(capitalizeWords(sanitizeNameInput(e.target.value)))}
               placeholder="Ad"
             />
           </div>
-          <div>
+          <div className="w-full">
             <Label>Soyad<span className="text-error-500">&nbsp;*</span></Label>
             <Input
               type="text"
               name="lname"
               value={surname}
-              onChange={(e) => setSurname(capitalizeWords(e.target.value))}
+              onChange={(e) => setSurname(capitalizeWords(sanitizeNameInput(e.target.value)))}
               placeholder="Soyad"
             />
           </div>
-          <div>
+          <div className="w-full">
             <Label>Ata adı<span className="text-error-500">&nbsp;*</span></Label>
             <Input
               type="text"
               name="fatherName"
               value={fatherName}
-              onChange={(e) => setFathername(capitalizeWords(e.target.value))}
+              onChange={(e) => setFathername(capitalizeWords(sanitizeNameInput(e.target.value)))}
               placeholder="Ata adı"
             />
           </div>
         </div>
 
-        <div>
+        <div className="w-full">
           <Label>Cinsiniz<span className="text-error-500">&nbsp;*</span></Label>
           <Select
             options={genderOptions}
@@ -131,7 +143,7 @@ export default function StepOneSignUp({ onNext }: StepOneSignUpProps) {
           />
         </div>
 
-        <div>
+        <div className="w-full">
           <Label>Doğum tarixi<span className="text-error-500">*</span></Label>
           <DatePicker
             id="end-date"
@@ -143,7 +155,7 @@ export default function StepOneSignUp({ onNext }: StepOneSignUpProps) {
           />
         </div>
 
-        <div>
+        <div className="w-full">
           <Label>Email<span className="text-error-500">&nbsp;*</span></Label>
           <Input
             type="email"
@@ -154,7 +166,7 @@ export default function StepOneSignUp({ onNext }: StepOneSignUpProps) {
           />
         </div>
 
-        <div>
+        <div className="w-full">
           <Label>Password<span className="text-error-500">&nbsp;*</span></Label>
           <div className="relative">
             <Input
@@ -178,7 +190,7 @@ export default function StepOneSignUp({ onNext }: StepOneSignUpProps) {
         </div>
 
         <Button
-          className="w-full px-4 py-3 text-white bg-blue-500 rounded-lg hover:bg-blue-600"
+          className="w-full px-4 py-3 text-sm sm:text-base md:text-lg text-white bg-blue-500 rounded-lg hover:bg-blue-600 transition-colors duration-200"
         >
           Növbəti
         </Button>

@@ -55,7 +55,7 @@ export default function NewExperience() {
         company: company,
         job_title: jobTitle,
         start_date: startDate,
-        end_date: endDate,
+        ...(endDate && !isChecked ? { end_date: endDate } : {}),
         job_location_type: +jobLocationType,
         employment_type: +employmentType,
         description: description
@@ -67,17 +67,17 @@ export default function NewExperience() {
         Swal.fire({
           icon: 'success',
           title: 'Uğurlu!',
-          text: 'Təhsil məlumatlarınız əlavə olundu.',
+          text: 'İş məlumatlarınız əlavə olundu.',
           timer: 2000
         }).then(() => {
           setLoading(false);
-          navigate("/educations");
+          navigate("/experiences");
         });
       } else if (result === "ERROR") {
         Swal.fire({
           icon: 'error',
           title: 'Xəta baş verdi',
-          text: 'Təhsil məlumatları əlavə edilə bilmədi. Zəhmət olmasa yenidən cəhd edin.',
+          text: 'İş məlumatları əlavə edilə bilmədi. Zəhmət olmasa yenidən cəhd edin.',
           confirmButtonText: 'OK'
         }).then(() => {
           setLoading(false);
@@ -105,14 +105,7 @@ export default function NewExperience() {
       setLoading(false);
     }
   };
-  
-//   # 1 - full-time
-//     # 2 - part-time
-//     # 3 - self-employed
-//     # 4 - freelance
-//     # 5 - contract
-//     # 6 - internship
-//     # 7 - volunteering
+
   const empOptions = [
     {
       value: "1",
@@ -244,7 +237,7 @@ export default function NewExperience() {
           <div className="flex justify-start items-center">
             <Checkbox checked={isChecked} onChange={setIsChecked} />
             <p className="ml-[10px] text-gray-800 dark:text-gray-200">
-              Hal-hazırda oxuyuram
+              Hal-hazırda işləyirəm
             </p>
           </div>
         </div>

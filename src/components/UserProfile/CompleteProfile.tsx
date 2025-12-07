@@ -8,8 +8,8 @@ import { useEffect, useState } from "react";
 import Input from "../form/input/InputField";
 import Checkbox from "../form/input/Checkbox";
 import { RootState } from "../../redux/store";
-import { completeProfile, CompleteProfilePayload, getAlumniDetails } from "../../services/alumni/alumniService";
 import { setProfileCompleted } from "../../redux/slices/authSlice";
+import { completeProfile, CompleteProfilePayload, getAlumniDetails } from "../../services/alumni/alumniService";
 
 export default function CompleteProfile() {
   const navigate = useNavigate();
@@ -25,6 +25,7 @@ export default function CompleteProfile() {
   const [phoneNumber, setPhoneNumber] = useState("");
   const [registeredCity, setRegisteredCity] = useState("");
   const [phoneIsPublic, setPhoneIsPublic] = useState(false);
+  const [submitLoading, setSubmitLoading] = useState(false);
   const [addressIsPublic, setAddressIsPublic] = useState(false);
   const [registeredAddress, setRegisteredAddress] = useState("");
   const [militaryObligation, setMilitartyObligation] = useState("");
@@ -128,7 +129,7 @@ export default function CompleteProfile() {
 
   const handleProfileComplete = async (e: React.FormEvent) => {
     e.preventDefault();
-    setLoading(true);
+    setSubmitLoading(true);
 
     const newErrors: Record<string, string> = {};
 
@@ -154,7 +155,7 @@ export default function CompleteProfile() {
         text: "Zəhmət olmasa, bütün sahələri doldurun",
         confirmButtonText: "Bağla"
       }).then(() => {
-        setLoading(false);
+        setSubmitLoading(false);
       });
       return;
     }
@@ -191,7 +192,7 @@ export default function CompleteProfile() {
           text: "Profil məlumatlarınız yadda saxlanıldı.",
           confirmButtonText: "OK"
         }).then(() => {
-          setLoading(false);
+          setSubmitLoading(false);
           setProfileCompleted();
           navigate("/profile");
         });
@@ -202,7 +203,7 @@ export default function CompleteProfile() {
           text: "Profil məlumatları yadda saxlanılmadı. Zəhmət olmasa yenidən cəhd edin.",
           confirmButtonText: "Bağla"
         }).then(() => {
-          setLoading(false);
+          setSubmitLoading(false);
         });
       } else if (result === "FIN_CONFLICT") {
         Swal.fire({
@@ -211,7 +212,7 @@ export default function CompleteProfile() {
           text: "Fin kod istifadə olunub. Zəhmət olmasa başqa bir fin kod yoxlayın.",
           confirmButtonText: "Bağla"
         }).then(() => {
-          setLoading(false);
+          setSubmitLoading(false);
         });
       } else if (result === "PHONE_CONFLICT") {
         Swal.fire({
@@ -220,7 +221,7 @@ export default function CompleteProfile() {
           text: "Telefon nömrəsi istifadə olunub. Zəhmət olmasa başqa bir telefon nömrəsi yoxlayın.",
           confirmButtonText: "Bağla"
         }).then(() => {
-          setLoading(false);
+          setSubmitLoading(false);
         });
       } else {
         Swal.fire({
@@ -229,7 +230,7 @@ export default function CompleteProfile() {
           text: "Profil məlumatları yadda saxlanılmadı. Zəhmət olmasa yenidən cəhd edin.",
           confirmButtonText: "Bağla"
         }).then(() => {
-          setLoading(false);
+          setSubmitLoading(false);
         });
       }
     } catch (err: any) {
@@ -239,7 +240,7 @@ export default function CompleteProfile() {
         text: "Profil məlumatları yadda saxlanılmadı. Zəhmət olmasa yenidən cəhd edin.",
         confirmButtonText: "Bağla"
       }).then(() => {
-        setLoading(false);
+        setSubmitLoading(false);
       });
     }
   }
@@ -459,8 +460,8 @@ export default function CompleteProfile() {
           </div>
         </div>
         <div className="flex items-center gap-3 px-2 mt-6 lg:justify-end">
-          <Button size="sm" disabled={loading}>
-            {loading ? "Yadda saxlanılır" : "Yadda saxla"}
+          <Button size="sm" disabled={submitLoading}>
+            {submitLoading ? "Yadda saxlanılır" : "Yadda saxla"}
           </Button>
         </div>
       </form>

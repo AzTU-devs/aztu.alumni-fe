@@ -1,6 +1,4 @@
-import Blank from "./pages/Blank";
 import { jwtDecode } from "jwt-decode";
-import Calendar from "./pages/Calendar";
 import { useSelector } from "react-redux";
 import { RootState } from "./redux/store";
 import Home from "./pages/Dashboard/Home";
@@ -9,18 +7,7 @@ import type { JwtPayload } from "jwt-decode";
 import SignIn from "./pages/AuthPages/SignIn";
 import SignUp from "./pages/AuthPages/SignUp";
 import useIsMobile from "./hooks/useIsMobile";
-import BarChart from "./pages/Charts/BarChart";
-import Videos from "./pages/UiElements/Videos";
-import Images from "./pages/UiElements/Images";
-import Alerts from "./pages/UiElements/Alerts";
-import Badges from "./pages/UiElements/Badges";
-import UserProfiles from "./pages/UserProfiles";
-import Avatars from "./pages/UiElements/Avatars";
-import Buttons from "./pages/UiElements/Buttons";
-import LineChart from "./pages/Charts/LineChart";
 import NotFound from "./pages/OtherPage/NotFound";
-import BasicTables from "./pages/Tables/BasicTables";
-import FormElements from "./pages/Forms/FormElements";
 import ResponsiveLayout from "./layout/ResponsiveLayout";
 import AlumnisPage from "./pages/alumnisPage/AlumnisPage";
 import SettingsPage from "./pages/settingsPage/SettingsPage";
@@ -30,12 +17,13 @@ import NewVacancyPage from "./pages/vacancyPage/NewVacancyPage";
 import EducationsPage from "./pages/educationPage/EducationsPage";
 import VacancyDetailsPage from "./pages/vacancyPage/VacancyDetails";
 import ExperiencesPage from "./pages/experiencePage/ExperiencesPage";
-import { BrowserRouter as Router, Routes, Route, Navigate } from "react-router";
 import AlumniDetailsPage from "./pages/alumnisPage/AlumniDetailsPage";
 import NewEducationPage from "./pages/educationPage/NewEducationPage";
 import CompleteProfile from "./components/UserProfile/CompleteProfile";
+import SavedVacanciesPage from "./pages/vacancyPage/SavedVacanciesPage";
 import NewExperiencePage from "./pages/experiencePage/NewExperiencePage";
 import VacancyCategoriesPage from "./pages/vacancyPage/VacancyCategoriesPage";
+import { BrowserRouter as Router, Routes, Route, Navigate } from "react-router";
 
 function isTokenValid(token: string | null): boolean {
   if (!token) return false;
@@ -60,41 +48,18 @@ export default function App() {
         <ScrollToTop />
         <Routes>
           {/* Dashboard Layout */}
-         <Route
-           element={
-             !isValid ? (
-               <Navigate to="/signin" replace />
-             ) : isMobile ? (
-               <ResponsiveLayout />
-             ) : (
-               <AppLayout />
-             )
-           }
-         >
+          <Route
+            element={
+              !isValid ? (
+                <Navigate to="/signin" replace />
+              ) : isMobile ? (
+                <ResponsiveLayout />
+              ) : (
+                <AppLayout />
+              )
+            }
+          >
             <Route index path="/" element={<Home />} />
-
-            {/* Others Page */}
-            <Route path="/profile" element={<UserProfiles />} />
-            <Route path="/calendar" element={<Calendar />} />
-            <Route path="/blank" element={<Blank />} />
-
-            {/* Forms */}
-            <Route path="/form-elements" element={<FormElements />} />
-
-            {/* Tables */}
-            <Route path="/basic-tables" element={<BasicTables />} />
-
-            {/* Ui Elements */}
-            <Route path="/alerts" element={<Alerts />} />
-            <Route path="/avatars" element={<Avatars />} />
-            <Route path="/badge" element={<Badges />} />
-            <Route path="/buttons" element={<Buttons />} />
-            <Route path="/images" element={<Images />} />
-            <Route path="/videos" element={<Videos />} />
-
-            {/* Charts */}
-            <Route path="/line-chart" element={<LineChart />} />
-            <Route path="/bar-chart" element={<BarChart />} />
 
             {/* Alumni */}
             <Route path="/alumnis" element={<AlumnisPage />} />
@@ -116,6 +81,7 @@ export default function App() {
             <Route path="/new-vacancy" element={<NewVacancyPage />} />
             <Route path="/vacancy-categories" element={<VacancyCategoriesPage />} />
             <Route path="/vacancy/:vacancy_code" element={<VacancyDetailsPage />} />
+            <Route path="/vacancy/saved" element={<SavedVacanciesPage />} />
 
             {/* Profile */}
             <Route path="/complete-profile" element={<CompleteProfile />} />

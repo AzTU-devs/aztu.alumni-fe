@@ -2,9 +2,13 @@ import { useEffect, useState } from "react";
 import { useParams } from "react-router-dom";
 import { Alumni, getAlumniDetails } from "../../services/alumni/alumniService";
 import { Education, getEducations } from "../../services/education/educationService";
+import { useSelector } from "react-redux";
+import { RootState } from "../../redux/store";
 
 export default function UserMetaCard() {
     const { uuid } = useParams<{ uuid: string }>();
+
+    const reduxUUID = useSelector((state: RootState) => state.auth.uuid);
 
     const [_, setError] = useState(false);
     const [loading, setLoading] = useState(false);
@@ -38,6 +42,14 @@ export default function UserMetaCard() {
                 setLoading(false);
             })
     }, []);
+
+    if (uuid !== reduxUUID) {
+        return (
+            <div className="text-red-600 w-full flex items-center justify-center">
+                Sizin bu səhifəyə giriş icazəniz yoxdur.
+            </div>
+        )
+    }
 
     return (
         <>

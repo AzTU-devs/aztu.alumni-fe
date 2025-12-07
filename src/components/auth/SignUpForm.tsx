@@ -1,14 +1,14 @@
 import { useState } from "react";
 import StepOneSignUp from "./StepOneSignUp";
 import StepTwoSignUp from "./StepTwoSignUp";
-import StepThreeSignUp from "./StepThreeSignUp";
 import StepFourSignUp from "./StepFourSignUp";
+import StepThreeSignUp from "./StepThreeSignUp";
 
 function Stepper({ currentStep }: { currentStep: number }) {
   const steps = [1, 2, 3, 4];
 
   return (
-    <div className="flex items-center w-full max-w-md mb-4">
+    <div className="flex items-center w-full max-w-xl mb-4 px-4 sm:px-0">
       {steps.map((step, index) => {
         // const isCompleted = currentStep > step;
         // const isActive = currentStep === step;
@@ -64,10 +64,8 @@ export default function SignUpForm() {
   const handleBack = () => setCurrentStep((prev) => prev - 1);
 
   return (
-    <div className="flex flex-col items-center justify-center w-[50%] px-4 min-h-screen">
-      {/* Stepper */}
+    <div className="flex flex-col items-center justify-center w-full max-w-3xl px-4 sm:px-6 lg:px-8 min-h-screen mx-auto">
       <Stepper currentStep={currentStep} />
-
       {currentStep === 1 && <StepOneSignUp onNext={handleNext} />}
       {currentStep === 2 && <StepTwoSignUp onNext={handleNext} onBack={handleBack} />}
       {currentStep === 3 && (<StepThreeSignUp onNext={handleNext} onBack={handleBack} />)}

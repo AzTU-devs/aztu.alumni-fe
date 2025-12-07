@@ -19,6 +19,7 @@ export interface VacancyInterface {
     description: string;
     html_content: string;
     created_at: string;
+    is_saved: boolean;
 }
 
 export interface VacancyPayload {
@@ -43,6 +44,7 @@ export interface VacancyPayload {
 export const getVacancies = async (
     start: number,
     end: number,
+    uuid?: string | null,
     search?: string,
     employment_type?: number,
     job_location_type?: number,
@@ -54,6 +56,7 @@ export const getVacancies = async (
         params.append("start", start.toString());
         params.append("end", end.toString());
 
+        if (uuid) params.append("uuid", uuid);
         if (search) params.append("search", search);
         if (employment_type !== undefined) params.append("employment_type", employment_type.toString());
         if (job_location_type !== undefined) params.append("job_location_type", job_location_type.toString());
@@ -180,3 +183,49 @@ export const deleteCategory = async (categoryCode: string) => {
         return "UNKNOWN_ERROR";
     }
 };
+
+// saved vacancies
+
+export interface SaveVacancyPaload {
+    uuid: string;
+    vacancy_code: string;
+}
+
+export const saveVacancy = async (payload: SaveVacancyPaload) => {
+    try {
+        const response = await apiClient.post("/api/vacancy/save", payload);
+
+        if (response.data.status_code === 201) {
+            return "SUCCESS";
+        }
+
+        return "ERROR";
+    } catch (error: any) {
+
+        const status = error?.response?.status;
+
+        if (status === 404) {
+            return "NOT_FOUND";
+        }
+
+        if (status) {
+            return `ERROR_${status}`;
+        }
+
+        return "UNKNOWN_ERROR";
+    }
+}
+
+export const getSavedVacancies = async (uuid: string) => {
+    try {
+        const response = await apiClient.get(`/api/vacancy/${uuid}/saved`);
+
+        if (response.data.status_code) {
+            return response.data.vacancies;
+        } else if (response.data.status_code === 204) {
+            return "NO_CONTENT";
+        }
+    } catch (err: any) {
+        return "ERROR";
+    }
+}
