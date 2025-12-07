@@ -6,8 +6,8 @@ export default function VacanciesPage() {
     return (
         <>
             <PageMeta
-                title="React.js Profile Dashboard | TailAdmin - Next.js Admin Dashboard Template"
-                description="This is React.js Profile Dashboard page for TailAdmin - React.js Tailwind CSS Admin Dashboard Template"
+                title="Azərbaycan Texniki Universiteti Məzun Portalı"
+                description="Azərbaycan Texniki Universitetinin məzunlarını karyera imkanlarını artırmaq üçün məzun portalı"
             />
             <PageBreadcrumb pageTitle="Vakansiyalar" />
             <div className="space-y-6">

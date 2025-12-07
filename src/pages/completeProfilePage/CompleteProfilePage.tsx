@@ -7,8 +7,8 @@ export default function CompleteProfilePage() {
     return (
         <>
             <PageMeta
-                title="React.js Basic Tables Dashboard | TailAdmin - Next.js Admin Dashboard Template"
-                description="This is React.js Basic Tables Dashboard page for TailAdmin - React.js Tailwind CSS Admin Dashboard Template"
+                title="Azərbaycan Texniki Universiteti Məzun Portalı"
+                description="Azərbaycan Texniki Universitetinin məzunlarını karyera imkanlarını artırmaq üçün məzun portalı"
             />
             <PageBreadcrumb pageTitle="Profili tamamla" />
             <div className="space-y-6">
