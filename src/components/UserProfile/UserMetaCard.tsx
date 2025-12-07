@@ -171,7 +171,6 @@ export default function UserMetaCard() {
           <h4 className="mb-4 text-xl font-semibold text-gray-800 dark:text-white/90">
             Şəkil əlavə edin
           </h4>
-          <DropzoneComponent />
           <div className="flex justify-end mt-4 gap-3">
             <Button size="sm" variant="outline" onClick={closeImageModal}>
               Ləğv et

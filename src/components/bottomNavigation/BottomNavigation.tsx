@@ -1,5 +1,3 @@
-import InfoIcon from '@mui/icons-material/Info';
-import HistoryIcon from '@mui/icons-material/History';
 import { useLocation, useNavigate } from 'react-router';
 import SettingsIcon from '@mui/icons-material/Settings';
 import HomeFilledIcon from '@mui/icons-material/HomeFilled';
