@@ -78,7 +78,7 @@ export default function UserProfile() {
                             </div>
                         </div>
                     </div>
-                    <div className="p-5 border border-gray-200 dark:border-gray-800 bg-white dark:bg-gray-900 rounded-2xl lg:p-6">
+                    <div className="p-5 border border-gray-200 dark:border-gray-800 bg-white dark:bg-gray-900 rounded-2xl lg:p-6 my-[10px]">
                         <div className="flex flex-col gap-5">
                             <div className="flex flex-col items-center justify-between w-full gap-6 xl:flex-row font-bold text-gray-900 dark:text-gray-100 border-b border-gray-200 dark:border-gray-700 pb-[20px]">
                                 <div>
