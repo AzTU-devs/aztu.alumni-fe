@@ -3,7 +3,6 @@ import { useEffect, useRef, useState } from "react";
 import { useSidebar } from "../context/SidebarContext";
 import UserDropdown from "../components/header/UserDropdown";
 import { ThemeToggleButton } from "../components/common/ThemeToggleButton";
-import NotificationDropdown from "../components/header/NotificationDropdown";
 
 const AppHeader: React.FC = () => {
   const [isApplicationMenuOpen, setApplicationMenuOpen] = useState(false);
