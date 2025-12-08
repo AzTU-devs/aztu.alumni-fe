@@ -24,6 +24,7 @@ import SavedVacanciesPage from "./pages/vacancyPage/SavedVacanciesPage";
 import NewExperiencePage from "./pages/experiencePage/NewExperiencePage";
 import VacancyCategoriesPage from "./pages/vacancyPage/VacancyCategoriesPage";
 import { BrowserRouter as Router, Routes, Route, Navigate } from "react-router";
+import UserProfile from "./components/UserProfile/UserProfile";
 
 function isTokenValid(token: string | null): boolean {
   if (!token) return false;
@@ -85,6 +86,7 @@ export default function App() {
 
             {/* Profile */}
             <Route path="/complete-profile" element={<CompleteProfile />} />
+            <Route path="/profile" element={<UserProfile />} />
 
           </Route>
 
