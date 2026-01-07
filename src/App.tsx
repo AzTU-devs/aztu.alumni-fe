@@ -13,6 +13,7 @@ import AlumnisPage from "./pages/alumnisPage/AlumnisPage";
 import SettingsPage from "./pages/settingsPage/SettingsPage";
 import { ScrollToTop } from "./components/common/ScrollToTop";
 import VacanciesPage from "./pages/vacancyPage/VacanciesPage";
+import UserProfile from "./components/UserProfile/UserProfile";
 import NewVacancyPage from "./pages/vacancyPage/NewVacancyPage";
 import EducationsPage from "./pages/educationPage/EducationsPage";
 import VacancyDetailsPage from "./pages/vacancyPage/VacancyDetails";
@@ -24,7 +25,6 @@ import SavedVacanciesPage from "./pages/vacancyPage/SavedVacanciesPage";
 import NewExperiencePage from "./pages/experiencePage/NewExperiencePage";
 import VacancyCategoriesPage from "./pages/vacancyPage/VacancyCategoriesPage";
 import { BrowserRouter as Router, Routes, Route, Navigate } from "react-router";
-import UserProfile from "./components/UserProfile/UserProfile";
 
 function isTokenValid(token: string | null): boolean {
   if (!token) return false;
